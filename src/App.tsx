@@ -2,13 +2,16 @@
 import { useState } from 'react';
 import ItemList from './components/ItemList'
 import AddItem from './components/AddItem';
-import './App.css'
+import './styles/App.css'
 
 export default function App() {
   const [scene, setScene] = useState("main");
   const [itemList, setItemList] = useState([
     {
       name: "(1) Kartoffeln",
+    },
+    {
+      name: "(2) Saft"
     }
   ]);
   const [doneItemList, setDoneItemList] = useState([]);
@@ -20,7 +23,7 @@ export default function App() {
   return (
     <div id="app">
       {scene == "main" ? 
-        <div>
+        <>
           <div className="title-row">
             <h1 className="title">Liste 1</h1>
             <button className="settings-btn">
@@ -43,7 +46,7 @@ export default function App() {
           <div className="list-selection">
             Liste 1
           </div>
-        </div> 
+        </> 
       : ""}
       {scene == "addItem" ? 
         <AddItem /> : ""

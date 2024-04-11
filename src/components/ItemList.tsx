@@ -1,4 +1,5 @@
 import { SetStateAction } from "react"
+import "./../styles/itemList.css"
 
 interface ItemListProps {
     itemList:Array<any>
@@ -28,10 +29,11 @@ export default function ItemList(props:ItemListProps) {
 
   return (
     <>
-        <div className="itemList">
+        <div className="itemList wrapper">
             {itemListElements}
         </div>
-        <div className="doneItemList">
+        <div className="doneItemList wrapper">
+            <p>zuletzt abgehakt</p>
             {doneItemListElements}
         </div>
     </>

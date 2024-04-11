@@ -1,0 +1,23 @@
+.itemList > div,
+.doneItemList > div {
+    display: flex;
+    padding: 10px;
+    font-size: 16px;
+}
+
+.doneItemList > p {
+    font-size: 12px;
+    margin-left: 10px;
+}
+
+.checkbox, .checkbox-checked {
+    width: 20px;
+    height: 20px;
+    background-color: var(--clr-white);
+    border-radius: 5px;
+    margin-left: auto;
+}
+
+.checkbox-checked {
+    background-color: var(--clr-green);
+}
