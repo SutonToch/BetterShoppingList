@@ -43,6 +43,7 @@ main {
     background-color: var(--clr-green);
     border: none;
     border-radius: 50%;
+    cursor: pointer;
 }
 
 .list-selection {

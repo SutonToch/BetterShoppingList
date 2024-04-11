@@ -3,26 +3,26 @@ import "./../styles/itemList.css"
 
 interface ItemListProps {
     itemList:Array<any>
-    doneItemList:Array<any>
     setItemList:React.Dispatch<SetStateAction<any>>
-    setDoneItemList:React.Dispatch<SetStateAction<any>>
+    setDoneItemList?:React.Dispatch<SetStateAction<any>>
+    mode?:string
 }
 
 export default function ItemList(props:ItemListProps) {
   const itemListElements = props.itemList.map((item) => {
     return (
-        <div>
+        <div key={item.name}>
             <p>{item.name}</p>
-            <div className="checkbox"/>
-        </div>
-    )
-  })
-
-  const doneItemListElements = props.doneItemList.map((item) => {
-    return (
-        <div>
-            <p>{item.name}</p>
-            <div className="checkbox-checked"/>
+            {props.mode == undefined ?
+              <div className="checkbox"/> : ""
+            }
+            {props.mode == "done" ? 
+              <div className="checkbox-checked"/> : ""
+            }
+            {
+              props.mode == "add" ?
+              <button className="add-box">+</button> : ""
+            }
         </div>
     )
   })
@@ -30,11 +30,8 @@ export default function ItemList(props:ItemListProps) {
   return (
     <>
         <div className="itemList wrapper">
+            {props.mode == "done" ? <p>zuletzt abgehakt</p> : ""}
             {itemListElements}
-        </div>
-        <div className="doneItemList wrapper">
-            <p>zuletzt abgehakt</p>
-            {doneItemListElements}
         </div>
     </>
   )

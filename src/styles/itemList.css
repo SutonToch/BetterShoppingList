@@ -1,11 +1,13 @@
-.itemList > div,
-.doneItemList > div {
+.itemList {
+    min-height: 10px;
+}
+.itemList > div {
     display: flex;
     padding: 10px;
     font-size: 16px;
 }
 
-.doneItemList > p {
+.itemList > p {
     font-size: 12px;
     margin-left: 10px;
 }
@@ -20,4 +22,16 @@
 
 .checkbox-checked {
     background-color: var(--clr-green);
+}
+
+.add-box {
+    width: 25px;
+    height: 25px;
+    font-size: 20px;
+    color: inherit;
+    margin-left: auto;
+    background-color: var(--clr-green);
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
 }

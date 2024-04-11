@@ -6,15 +6,33 @@ import './styles/App.css'
 
 export default function App() {
   const [scene, setScene] = useState("main");
+  const allItemList = [
+    {
+      name: "(1) Kartoffeln",
+    },
+    {
+      name: "(1) Zwiebeln",
+    },
+    {
+      name: "(2) Saft",
+    },
+    {
+      name: "(3) Salzbrezeln",
+    }
+  ]
   const [itemList, setItemList] = useState([
     {
       name: "(1) Kartoffeln",
     },
     {
-      name: "(2) Saft"
+      name: "(2) Saft",
     }
   ]);
-  const [doneItemList, setDoneItemList] = useState([]);
+  const [doneItemList, setDoneItemList] = useState([
+    {
+      name: "(1) Zwiebeln",
+    }
+  ]);
 
   // useEffect to get all the data and store it
   // it's not enough to be a huge burden
@@ -33,9 +51,14 @@ export default function App() {
           <main>
             <ItemList
               itemList={itemList}
-              doneItemList={doneItemList}
               setItemList={setItemList}
               setDoneItemList={setDoneItemList}
+            />
+            <ItemList 
+              itemList={doneItemList}
+              setItemList={setItemList}
+              setDoneItemList={setDoneItemList}
+              mode={"done"}
             />
             <div className="control-bar wrapper">
               <button className="add-item-btn" onClick={() => setScene("addItem")}>
@@ -49,7 +72,12 @@ export default function App() {
         </> 
       : ""}
       {scene == "addItem" ? 
-        <AddItem /> : ""
+        <AddItem 
+          allItems={allItemList}
+          itemList={itemList}
+          setItemList={setItemList}
+          setScene={setScene}
+        /> : ""
       }
     </div>
   )
