@@ -51,11 +51,13 @@ export default function App() {
           <main>
             <ItemList
               itemList={itemList}
+              doneItemList={doneItemList}
               setItemList={setItemList}
               setDoneItemList={setDoneItemList}
             />
             <ItemList 
-              itemList={doneItemList}
+              itemList={itemList}
+              doneItemList={doneItemList}
               setItemList={setItemList}
               setDoneItemList={setDoneItemList}
               mode={"done"}

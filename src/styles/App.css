@@ -3,7 +3,6 @@
     grid-template-rows: 50px auto 40px;
     height: 100vh;
     height: 100svh;
-    max-width: 1440px;
     color: var(--clr-white);
     background-color: var(--clr-background);
 }
@@ -50,6 +49,5 @@ main {
     display: flex;
     align-items: center;
     font-size: 22px;
-    border: 2px solid var(--clr-white);
     background-color: var(--clr-lighter-background);
 }
