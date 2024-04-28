@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import ItemList from './components/ItemList'
 import AddItem from './components/AddItem';
+import TitleRow from './components/TitleRow';
 import './styles/App.css'
 
 export default function App() {
@@ -42,12 +43,9 @@ export default function App() {
     <div id="app">
       {scene == "main" ? 
         <>
-          <div className="title-row">
-            <h1 className="title">Liste 1</h1>
-            <button className="settings-btn">
-              s {/*to be replaced with an image*/}
-            </button>
-          </div>
+          <TitleRow 
+            title="Liste 1"
+          />
           <main>
             <ItemList
               itemList={itemList}

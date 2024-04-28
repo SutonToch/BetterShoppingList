@@ -1,5 +1,6 @@
 import { SetStateAction } from "react";
 import ItemList from "./ItemList";
+import TitleRow from "./TitleRow";
 
 interface AddItemProps {
   allItems:Array<any>
@@ -17,15 +18,10 @@ export default function AddItem(props:AddItemProps) {
 
   return (
     <>
-      <div className="title-row">
-          <button className="back-btn" onClick={() => props.setScene("main")}>
-            {"<-"}
-          </button>
-          <h1 className="title">Liste 1</h1>
-          <button className="settings-btn">
-            s {/*to be replaced with an image*/}
-          </button>
-      </div>
+      <TitleRow 
+        title="Liste 1"
+        backOnClick={() => props.setScene("main")}
+      />
       <main>
         <ItemList 
           itemList={reducedItemList}
