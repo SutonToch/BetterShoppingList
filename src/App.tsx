@@ -1,26 +1,24 @@
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import ItemList from './components/ItemList'
 import AddItem from './components/AddItem';
 import TitleRow from './components/TitleRow';
+import { usersCollection } from './firebase.ts';
+import { onSnapshot } from 'firebase/firestore';
 import './styles/App.css'
 
 export default function App() {
   const [scene, setScene] = useState("main");
-  const allItemList = [
-    {
-      name: "(1) Kartoffeln",
-    },
-    {
-      name: "(1) Zwiebeln",
-    },
-    {
-      name: "(2) Saft",
-    },
-    {
-      name: "(3) Salzbrezeln",
-    }
-  ]
+  const [allItemList, setAllItemList] = useState([])
+
+  useEffect(() => {
+    const unsubscribe = onSnapshot(usersCollection, (snapshot) => {
+      const dataArr = snapshot.docs.map(doc => ({...doc.data()}))
+      setAllItemList(dataArr[0].allItems)
+    })
+    return unsubscribe
+  }, [])
+
   const [itemList, setItemList] = useState([
     {
       name: "(1) Kartoffeln",
