@@ -1,5 +1,5 @@
 
-import { useEffect, useState } from 'react';
+import { SetStateAction, useEffect, useState } from 'react';
 import ItemList from './components/ItemList'
 import AddItem from './components/AddItem';
 import TitleRow from './components/TitleRow';
@@ -7,31 +7,39 @@ import { usersCollection } from './firebase.ts';
 import { onSnapshot } from 'firebase/firestore';
 import './styles/App.css'
 
+interface itemType {
+  done: boolean,
+  name: string,
+  onList: boolean
+}
+
 export default function App() {
   const [scene, setScene] = useState("main");
   const [allItemList, setAllItemList] = useState([])
+  const [itemList, setItemList] = useState([{}]);
+  const [doneItemList, setDoneItemList] = useState([{}]);
 
+  // get initial data from firebase and initialize itemList states
   useEffect(() => {
     const unsubscribe = onSnapshot(usersCollection, (snapshot) => {
       const dataArr = snapshot.docs.map(doc => ({...doc.data()}))
-      setAllItemList(dataArr[0].allItems)
+      const allItems = dataArr[0].allItems
+      setAllItemList(allItems)
+
+      let itemList: SetStateAction<{}[]> = []
+      let doneItemList: SetStateAction<{}[]> = []
+      allItems.forEach((item: itemType) => {
+        if(item.onList) {
+          item.done ? 
+            doneItemList.push(item) :
+            itemList.push(item)
+        }
+      })
+      setItemList(itemList)
+      setDoneItemList(doneItemList)
     })
     return unsubscribe
   }, [])
-
-  const [itemList, setItemList] = useState([
-    {
-      name: "(1) Kartoffeln",
-    },
-    {
-      name: "(2) Saft",
-    }
-  ]);
-  const [doneItemList, setDoneItemList] = useState([
-    {
-      name: "(1) Zwiebeln",
-    }
-  ]);
 
   // useEffect to get all the data and store it
   // it's not enough to be a huge burden
