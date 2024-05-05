@@ -80,7 +80,6 @@ export default function App() {
       {scene == "addItem" ? 
         <AddItem 
           allItems={allItemList}
-          itemList={itemList}
           setItemList={setItemList}
           setScene={setScene}
         /> : ""

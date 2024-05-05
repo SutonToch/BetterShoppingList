@@ -4,17 +4,12 @@ import TitleRow from "./TitleRow";
 
 interface AddItemProps {
   allItems:Array<any>
-  itemList:Array<any>
   setItemList:React.Dispatch<SetStateAction<any>>
   setScene:React.Dispatch<React.SetStateAction<string>>
 }
 
 export default function AddItem(props:AddItemProps) {
-
-  // everything from allItems that is not in itemList
-  const reducedItemList = props.allItems.filter((itemFromAll) => {
-    return(!props.itemList.map(item => item.name).includes(itemFromAll.name))
-  })
+  const reducedItemList = props.allItems.filter((item) => !item.onList)
 
   return (
     <>
