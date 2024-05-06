@@ -3,25 +3,36 @@ import "./../styles/itemList.css"
 
 interface ItemListProps {
     itemList:Array<any>
-    doneItemList?:Array<any>
     setItemList:React.Dispatch<SetStateAction<any>>
-    setDoneItemList?:React.Dispatch<SetStateAction<any>>
     mode?:string
 }
 
 export default function ItemList(props:ItemListProps) {
-  let currentItemList = props.mode == "done" ? props.doneItemList : props.itemList
-  if(!currentItemList) {currentItemList = props.itemList}
-  
-  const itemListElements = currentItemList.map((item) => {
+  const itemList = props.itemList;
+  let reducedItemList = []
+  switch (props.mode) {
+    case undefined: reducedItemList = 
+      itemList.filter((item) => item.onList && !item.done)
+      break;
+    case "done": reducedItemList =
+      itemList.filter((item) => item.onList && item.done)
+      break;
+    case "add": reducedItemList = 
+      itemList.filter((item) => !item.onList)
+      break;
+  }
+
+  const itemListElements = reducedItemList.map((item) => {
     return (
         <div key={item.name}>
             <p>{item.name}</p>
             {props.mode == undefined ?
-              <div className="checkbox" onClick={(e) => tickItem(e)} /> : ""
+              <div className="checkbox" 
+                onClick={(e) => changeItemDone(e, true)} /> : ""
             }
             {props.mode == "done" ? 
-              <div className="checkbox-checked" onClick={(e) => untickItem(e)} /> : ""
+              <div className="checkbox-checked" 
+                onClick={(e) => changeItemDone(e, false)} /> : ""
             }
             {
               props.mode == "add" ?
@@ -31,40 +42,16 @@ export default function ItemList(props:ItemListProps) {
     )
   })
 
-  function tickItem(e: any) {
-    if(!props.doneItemList || !props.setDoneItemList) {return}
+  function changeItemDone(e: any, targetDone: boolean) {
+    const nameOfTickedItem = e.target.previousElementSibling.textContent;
+    const newItemList = itemList.map((item) => {
+      if(item.name !== nameOfTickedItem) {
+        return item;
+      }
 
-    const newItemList = props.itemList.filter(
-      (item) => item.name !== e.target.previousElementSibling.textContent
-    )
-    if(newItemList.length > 0) {
-      props.setItemList(newItemList)
-    } else {
-      props.setItemList([])
-    }
-
-    props.setDoneItemList([
-      ...props.doneItemList, 
-      {name: e.target.previousElementSibling.textContent}
-    ])
-  }
-
-  function untickItem(e: any) {
-    if(!props.doneItemList || !props.setDoneItemList) {return}
-
-    props.setItemList([
-      ...props.itemList, 
-      {name: e.target.previousElementSibling.textContent}
-    ])
-
-    const newDoneItemList = props.doneItemList.filter(
-      (item) => item.name !== e.target.previousElementSibling.textContent
-    )
-    if(newDoneItemList.length > 0) {
-      props.setDoneItemList(newDoneItemList)
-    } else {
-      props.setDoneItemList([])
-    }
+      return {...item, done: targetDone}
+    })
+    props.setItemList(newItemList)
   }
 
   return (

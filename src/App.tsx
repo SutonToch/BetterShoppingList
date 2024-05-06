@@ -1,5 +1,5 @@
 
-import { SetStateAction, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import ItemList from './components/ItemList'
 import AddItem from './components/AddItem';
 import TitleRow from './components/TitleRow';
@@ -16,8 +16,6 @@ interface itemType {
 export default function App() {
   const [scene, setScene] = useState("main");
   const [allItemList, setAllItemList] = useState([])
-  const [itemList, setItemList] = useState([{}]);
-  const [doneItemList, setDoneItemList] = useState([{}]);
 
   // get initial data from firebase and initialize itemList states
   useEffect(() => {
@@ -25,18 +23,6 @@ export default function App() {
       const dataArr = snapshot.docs.map(doc => ({...doc.data()}))
       const allItems = dataArr[0].allItems
       setAllItemList(allItems)
-
-      let itemList: SetStateAction<{}[]> = []
-      let doneItemList: SetStateAction<{}[]> = []
-      allItems.forEach((item: itemType) => {
-        if(item.onList) {
-          item.done ? 
-            doneItemList.push(item) :
-            itemList.push(item)
-        }
-      })
-      setItemList(itemList)
-      setDoneItemList(doneItemList)
     })
     return unsubscribe
   }, [])
@@ -54,16 +40,12 @@ export default function App() {
           />
           <main>
             <ItemList
-              itemList={itemList}
-              doneItemList={doneItemList}
-              setItemList={setItemList}
-              setDoneItemList={setDoneItemList}
+              itemList={allItemList}
+              setItemList={setAllItemList}
             />
             <ItemList 
-              itemList={itemList}
-              doneItemList={doneItemList}
-              setItemList={setItemList}
-              setDoneItemList={setDoneItemList}
+              itemList={allItemList}
+              setItemList={setAllItemList}
               mode={"done"}
             />
             <div className="control-bar wrapper">
@@ -80,7 +62,7 @@ export default function App() {
       {scene == "addItem" ? 
         <AddItem 
           allItems={allItemList}
-          setItemList={setItemList}
+          setItemList={setAllItemList}
           setScene={setScene}
         /> : ""
       }

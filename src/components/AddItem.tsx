@@ -9,8 +9,6 @@ interface AddItemProps {
 }
 
 export default function AddItem(props:AddItemProps) {
-  const reducedItemList = props.allItems.filter((item) => !item.onList)
-
   return (
     <>
       <TitleRow 
@@ -19,7 +17,7 @@ export default function AddItem(props:AddItemProps) {
       />
       <main>
         <ItemList 
-          itemList={reducedItemList}
+          itemList={props.allItems}
           setItemList={props.setItemList}
           mode={"add"}
         />
