@@ -1,13 +1,21 @@
 .itemList {
+    list-style-type: none;
+    padding: 0;
     min-height: 10px;
 }
-.itemList > div {
+
+.itemList:empty {
+    display: none;
+}
+
+.itemList > li {
     display: flex;
     padding: 10px;
     font-size: 16px;
 }
 
 .itemList > p {
+    padding: 5px;
     font-size: 12px;
     margin-left: 10px;
 }

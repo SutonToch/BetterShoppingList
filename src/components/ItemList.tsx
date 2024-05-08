@@ -24,7 +24,7 @@ export default function ItemList(props:ItemListProps) {
 
   const itemListElements = reducedItemList.map((item) => {
     return (
-        <div key={item.name}>
+        <li key={item.name}>
             <p>{item.name}</p>
             {props.mode == undefined ?
               <div className="checkbox" 
@@ -39,7 +39,7 @@ export default function ItemList(props:ItemListProps) {
               <button className="add-box"
                 onClick={(e) => addToList(e)}>+</button> : ""
             }
-        </div>
+        </li>
     )
   })
 
@@ -69,10 +69,10 @@ export default function ItemList(props:ItemListProps) {
 
   return (
     <>
-        <div className="itemList wrapper">
+        <ul className="itemList wrapper">
             {props.mode == "done" ? <p>zuletzt abgehakt</p> : ""}
             {itemListElements}
-        </div>
+        </ul>
     </>
   )
 }
