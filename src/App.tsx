@@ -17,8 +17,8 @@ export default function App() {
   const [scene, setScene] = useState("main");
   const [allItemList, setAllItemList] = useState([])
 
-  // get initial data from firebase and initialize itemList states
   useEffect(() => {
+    // get initial data from firebase and initialize itemList states
     const unsubscribe = onSnapshot(usersCollection, (snapshot) => {
       const dataArr = snapshot.docs.map(doc => ({...doc.data()}))
       const allItems = dataArr[0].allItems
@@ -26,10 +26,6 @@ export default function App() {
     })
     return unsubscribe
   }, [])
-
-  // useEffect to get all the data and store it
-  // it's not enough to be a huge burden
-  // and this way a minimal amount of database requests can be ensured
 
   return (
     <div id="app">
