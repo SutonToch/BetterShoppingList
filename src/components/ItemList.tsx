@@ -36,7 +36,8 @@ export default function ItemList(props:ItemListProps) {
             }
             {
               props.mode == "add" ?
-              <button className="add-box">+</button> : ""
+              <button className="add-box"
+                onClick={(e) => addToList(e)}>+</button> : ""
             }
         </div>
     )
@@ -50,6 +51,18 @@ export default function ItemList(props:ItemListProps) {
       }
 
       return {...item, done: targetDone}
+    })
+    props.setItemList(newItemList)
+  }
+
+  function addToList(e: any) {
+    const nameOfAddedItem = e.target.previousElementSibling.textContent;
+    const newItemList = itemList.map((item) => {
+      if(item.name !== nameOfAddedItem) {
+        return item;
+      }
+
+      return {...item, onList: true}
     })
     props.setItemList(newItemList)
   }
