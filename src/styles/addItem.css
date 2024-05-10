@@ -1,0 +1,26 @@
+.add-item-form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding: 4%;
+    margin-top: 20px;
+}
+
+.add-item-form > input[type="text"] {
+    font-size: 20px;
+    color: var(--clr-white);
+    background-color: var(--clr-lighter-background);
+    border: none;
+    border-radius: 100px;
+    outline: none;
+    padding: 5px 20px;
+    max-height: 30px;
+}
+
+.bezeichnung {
+    grid-column-end: span 2;
+}
+
+.add-item-form > .add-item-btn {
+    grid-column-end: span 2;
+    align-self: self-end;
+}

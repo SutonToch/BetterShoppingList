@@ -51,13 +51,14 @@ export default function App() {
             </div>
           </main>
           <div className="list-selection">
-            Liste 1
+            <div className="list-selection-item active">Liste 1</div>
+            
           </div>
         </> 
       : ""}
       {scene == "addItem" ? 
         <AddItem 
-          allItems={allItemList}
+          itemList={allItemList}
           setItemList={setAllItemList}
           setScene={setScene}
         /> : ""

@@ -22,9 +22,12 @@ main {
 }
 
 .add-item-btn {
-    width: 40px;
-    height: 40px;
-    font-size: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    font-size: 40px;
     color: inherit;
     margin-left: auto;
     background-color: var(--clr-green);
@@ -36,6 +39,21 @@ main {
 .list-selection {
     display: flex;
     align-items: center;
+    text-align: center;
     font-size: 22px;
     background-color: var(--clr-lighter-background);
+}
+
+.list-selection > .active {
+    color: var(--clr-green);
+    font-weight: bold;
+}
+
+.list-selection-item {
+    cursor: pointer;
+    width: 100%;
+}
+
+.list-selection-item:not(:last-child) {
+    border-right: 1px solid var(--clr-white);
 }
