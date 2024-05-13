@@ -3,8 +3,8 @@ import { useEffect, useState } from 'react';
 import ItemList from './components/ItemList'
 import AddItem from './components/AddItem';
 import TitleRow from './components/TitleRow';
-import { usersCollection } from './firebase.ts';
-import { onSnapshot } from 'firebase/firestore';
+import { usersCollection, db } from './firebase.ts';
+import { doc, onSnapshot, setDoc } from 'firebase/firestore';
 import './styles/App.css'
 
 interface itemType {
@@ -26,6 +26,14 @@ export default function App() {
     })
     return unsubscribe
   }, [])
+
+  useEffect(() => {
+    const timeoutId = setTimeout(async () => {
+      const docRef = doc(db, "users", "user1")
+      await setDoc(docRef, {allItems: allItemList}, {merge: true})
+    }, 3000)
+    return () => clearTimeout(timeoutId)
+  }, [allItemList])
 
   return (
     <div id="app">
