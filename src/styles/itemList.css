@@ -9,7 +9,8 @@
 }
 
 .itemList > li {
-    display: flex;
+    display: grid;
+    grid-template-columns: 2fr 1fr;
     padding: 10px;
     font-size: 16px;
 }
@@ -20,12 +21,16 @@
     margin-left: 10px;
 }
 
+.item-options {
+    display: flex;
+    justify-content: space-between;
+}
+
 .checkbox, .checkbox-checked {
     width: 20px;
     height: 20px;
     background-color: var(--clr-white);
     border-radius: 5px;
-    margin-left: auto;
 }
 
 .checkbox-checked {

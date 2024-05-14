@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react';
 import ShoppingList from './components/ShoppingList.tsx';
 import AddItem from './components/AddItem';
+import NewOrEditItem from './components/NewOrEditItem.tsx';
 import { usersCollection, db } from './firebase.ts';
 import { doc, onSnapshot, setDoc } from 'firebase/firestore';
 import './styles/App.css'
@@ -15,6 +16,10 @@ interface itemType {
 export default function App() {
   const [scene, setScene] = useState("main");
   const [allItemList, setAllItemList] = useState([])
+  const [currentItemDetails, setCrrentItemDetails] = useState({
+    edit: false,
+    title: ""
+  })
 
   useEffect(() => {
     // get initial data from firebase and initialize itemList states
@@ -41,6 +46,7 @@ export default function App() {
           allItemList={allItemList}
           setAllItemList={setAllItemList}
           setScene={setScene}
+          setCurrentItemDetails={setCrrentItemDetails}
         />
       : ""}
       {scene == "addItem" ? 
@@ -48,8 +54,17 @@ export default function App() {
           itemList={allItemList}
           setItemList={setAllItemList}
           setScene={setScene}
-        /> : ""
-      }
+        /> 
+      : ""}
+      {scene == "newOrEditItem" ?
+        <NewOrEditItem 
+          itemList={allItemList}
+          setItemList={setAllItemList}
+          setScene={setScene}
+          title={currentItemDetails.title}
+          edit={currentItemDetails.edit}
+        /> 
+      : ""}
     </div>
   )
 }

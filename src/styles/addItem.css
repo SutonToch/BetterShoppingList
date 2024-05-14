@@ -16,7 +16,7 @@
     max-height: 30px;
 }
 
-.bezeichnung {
+.item-title {
     grid-column-end: span 2;
 }
 

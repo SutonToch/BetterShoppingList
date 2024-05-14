@@ -6,6 +6,10 @@ interface ShoppingListProps {
     allItemList:Array<any>
     setAllItemList:React.Dispatch<SetStateAction<any>>
     setScene:React.Dispatch<React.SetStateAction<string>>
+    setCurrentItemDetails:React.Dispatch<React.SetStateAction<{
+      edit: boolean;
+      title: string;
+    }>>
 }
 
 export default function ShoppingList(props: ShoppingListProps) {
@@ -18,10 +22,14 @@ export default function ShoppingList(props: ShoppingListProps) {
         <ItemList
           itemList={props.allItemList}
           setItemList={props.setAllItemList}
+          setScene={props.setScene}
+          setCurrentItemDetails={props.setCurrentItemDetails}
         />
         <ItemList 
           itemList={props.allItemList}
           setItemList={props.setAllItemList}
+          setScene={props.setScene}
+          setCurrentItemDetails={props.setCurrentItemDetails}
           mode={"done"}
         />
         <div className="control-bar wrapper">

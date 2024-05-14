@@ -4,6 +4,11 @@ import "./../styles/itemList.css"
 interface ItemListProps {
     itemList:Array<any>
     setItemList:React.Dispatch<SetStateAction<any>>
+    setScene:React.Dispatch<React.SetStateAction<string>>
+    setCurrentItemDetails:React.Dispatch<React.SetStateAction<{
+      edit: boolean;
+      title: string;
+    }>>
     mode?:string
 }
 
@@ -27,12 +32,18 @@ export default function ItemList(props:ItemListProps) {
         <li key={item.name}>
             <p>{item.name}</p>
             {props.mode == undefined ?
-              <div className="checkbox" 
-                onClick={(e) => changeItemDone(e, true)} /> : ""
+              <div className="item-options">
+                <div className="edit" onClick={(e) => openEditItem(e)}>edit</div>
+                <div className="checkbox" 
+                  onClick={(e) => changeItemDone(e, true)} />
+              </div> : ""
             }
             {props.mode == "done" ? 
-              <div className="checkbox-checked" 
-                onClick={(e) => changeItemDone(e, false)} /> : ""
+              <div className="item-options">
+                <div className="edit">edit</div>
+                <div className="checkbox-checked" 
+                  onClick={(e) => changeItemDone(e, false)} />
+              </div> : ""
             }
             {
               props.mode == "add" ?
@@ -43,8 +54,18 @@ export default function ItemList(props:ItemListProps) {
     )
   })
 
+  function openEditItem(e: any) {
+    const nameOfTickedItem = e.target.parentNode.previousElementSibling.textContent;
+    props.setCurrentItemDetails({
+      edit: true,
+      title: nameOfTickedItem
+    })
+    props.setScene("newOrEditItem")
+
+  }
+
   function changeItemDone(e: any, targetDone: boolean) {
-    const nameOfTickedItem = e.target.previousElementSibling.textContent;
+    const nameOfTickedItem = e.target.parentNode.previousElementSibling.textContent;
     const newItemList = itemList.map((item) => {
       if(item.name !== nameOfTickedItem) {
         return item;

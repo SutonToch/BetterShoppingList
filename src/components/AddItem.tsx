@@ -1,7 +1,6 @@
-import { SetStateAction, useState } from "react";
+import { SetStateAction } from "react";
 import ItemList from "./ItemList";
 import TitleRow from "./TitleRow";
-import NewItem from "./NewItem";
 
 interface AddItemProps {
   itemList:Array<any>
@@ -10,35 +9,23 @@ interface AddItemProps {
 }
 
 export default function AddItem(props:AddItemProps) {
-  const [tab, setTab] = useState("Alt");
 
   return (
     <>
-      {tab == "Alt" ?
-        <>
-          <TitleRow 
-            title="Liste 1"
-            backOnClick={() => props.setScene("main")}
-          />       
-          <main>
-            <ItemList 
-              itemList={props.itemList}
-              setItemList={props.setItemList}
-              mode={"add"}
-            />
-            <button className="add-item-btn" style={{marginTop: "auto"}} onClick={() => setTab("Neu")}>
-              +
-            </button>
-          </main>
-        </> : ""  
-      }
-      {tab == "Neu" ?
-        <NewItem 
+      <TitleRow 
+        title="Liste 1"
+        backOnClick={() => props.setScene("main")}
+      />       
+      <main>
+        <ItemList 
           itemList={props.itemList}
           setItemList={props.setItemList}
-          setTab={setTab}
-        /> : ""  
-      }
+          mode={"add"}
+        />
+        <button className="add-item-btn" style={{marginTop: "auto"}} onClick={() => props.setScene("newOrEditItem")}>
+          +
+        </button>
+      </main>
     </>
   )
 }
