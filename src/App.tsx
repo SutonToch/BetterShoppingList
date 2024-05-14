@@ -54,6 +54,7 @@ export default function App() {
           itemList={allItemList}
           setItemList={setAllItemList}
           setScene={setScene}
+          setCurrentItemDetails={setCrrentItemDetails}
         /> 
       : ""}
       {scene == "newOrEditItem" ?

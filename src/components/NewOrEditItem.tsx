@@ -1,6 +1,7 @@
 import { SetStateAction, useState } from "react";
 import TitleRow from "./TitleRow";
 import "./../styles/addItem.css"
+import ArrowRight from "./../assets/icons/arrow-right.svg";
 
 interface NewItemProps {
     itemList:Array<any>
@@ -26,6 +27,9 @@ export default function NewItem(props:NewItemProps) {
           props.setItemList(newItemList)
           props.setScene("main")
         } else {
+          if(title == "") {
+            return;
+          }
           const newItem = {done: false, name: title, onList: true}
           props.setItemList([...props.itemList, newItem])
           setTitle("")
@@ -46,7 +50,7 @@ export default function NewItem(props:NewItemProps) {
             value={title} 
             onChange={(e) => setTitle(e.target.value)}
           />
-          <input type="submit" className="add-item-btn" value="->" />
+          <input type="image" className="add-item-btn" alt="submit" src={ArrowRight} />
         </form>
     </>
   )

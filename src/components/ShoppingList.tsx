@@ -1,6 +1,7 @@
 import { SetStateAction } from "react";
 import ItemList from "./ItemList";
 import TitleRow from "./TitleRow";
+import { Plus } from "./Icons";
 
 interface ShoppingListProps {
     allItemList:Array<any>
@@ -34,7 +35,7 @@ export default function ShoppingList(props: ShoppingListProps) {
         />
         <div className="control-bar wrapper">
           <button className="add-item-btn" onClick={() => props.setScene("addItem")}>
-            +
+            <Plus size={40}/>
           </button>
         </div>
       </main>

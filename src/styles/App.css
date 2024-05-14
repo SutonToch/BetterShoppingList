@@ -27,13 +27,12 @@ main {
     justify-content: center;
     width: 42px;
     height: 42px;
-    font-size: 40px;
     color: inherit;
-    margin-left: auto;
     background-color: var(--clr-green);
     border: none;
     border-radius: 50%;
-    cursor: pointer;
+    
+    margin-left: auto;
 }
 
 .list-selection {

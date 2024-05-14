@@ -1,5 +1,6 @@
 import { SetStateAction } from "react"
 import "./../styles/itemList.css"
+import { Edit, Plus } from "./Icons"
 
 interface ItemListProps {
     itemList:Array<any>
@@ -33,14 +34,14 @@ export default function ItemList(props:ItemListProps) {
             <p>{item.name}</p>
             {props.mode == undefined ?
               <div className="item-options">
-                <div className="edit" onClick={(e) => openEditItem(e)}>edit</div>
+                <div className="edit" onClick={(e) => openEditItem(e)}><Edit /></div>
                 <div className="checkbox" 
                   onClick={(e) => changeItemDone(e, true)} />
               </div> : ""
             }
             {props.mode == "done" ? 
               <div className="item-options">
-                <div className="edit">edit</div>
+                <div className="edit" onClick={(e) => openEditItem(e)}><Edit /></div>
                 <div className="checkbox-checked" 
                   onClick={(e) => changeItemDone(e, false)} />
               </div> : ""
@@ -48,14 +49,14 @@ export default function ItemList(props:ItemListProps) {
             {
               props.mode == "add" ?
               <button className="add-box"
-                onClick={(e) => addToList(e)}>+</button> : ""
+                onClick={(e) => addToList(e)}><Plus size={20}/></button> : ""
             }
         </li>
     )
   })
 
   function openEditItem(e: any) {
-    const nameOfTickedItem = e.target.parentNode.previousElementSibling.textContent;
+    const nameOfTickedItem = e.currentTarget.parentNode.previousElementSibling.textContent;
     props.setCurrentItemDetails({
       edit: true,
       title: nameOfTickedItem
@@ -65,7 +66,7 @@ export default function ItemList(props:ItemListProps) {
   }
 
   function changeItemDone(e: any, targetDone: boolean) {
-    const nameOfTickedItem = e.target.parentNode.previousElementSibling.textContent;
+    const nameOfTickedItem = e.currentTarget.parentNode.previousElementSibling.textContent;
     const newItemList = itemList.map((item) => {
       if(item.name !== nameOfTickedItem) {
         return item;
@@ -77,7 +78,7 @@ export default function ItemList(props:ItemListProps) {
   }
 
   function addToList(e: any) {
-    const nameOfAddedItem = e.target.previousElementSibling.textContent;
+    const nameOfAddedItem = e.currentTarget.previousElementSibling.textContent;
     const newItemList = itemList.map((item) => {
       if(item.name !== nameOfAddedItem) {
         return item;

@@ -38,9 +38,11 @@
 }
 
 .add-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     width: 25px;
     height: 25px;
-    font-size: 20px;
     color: inherit;
     margin-left: auto;
     background-color: var(--clr-green);
