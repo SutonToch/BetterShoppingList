@@ -8,10 +8,8 @@
 }
 
 main {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    padding: 4%;
+    padding: 0 4% 4%;
+    overflow: auto;
 }
 
 .control-bar {
@@ -41,6 +39,12 @@ main {
     text-align: center;
     font-size: 22px;
     background-color: var(--clr-lighter-background);
+    border-top: 5px solid var(--clr-background);
+
+    position: fixed;
+    inset-inline: 0;
+    bottom: 0;
+    height: 40px;
 }
 
 .list-selection > .active {
