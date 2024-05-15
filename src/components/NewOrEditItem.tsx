@@ -17,6 +17,10 @@ export default function NewItem(props:NewItemProps) {
     function submitItemListChange(e:React.FormEvent<HTMLFormElement>) {
         e.preventDefault()
 
+        if(title == "") {
+          return;
+        }
+
         if(props.edit) {
           const newItemList = props.itemList.map((item) => {
             if(item.name !== props.title) {
@@ -27,9 +31,6 @@ export default function NewItem(props:NewItemProps) {
           props.setItemList(newItemList)
           props.setScene("main")
         } else {
-          if(title == "") {
-            return;
-          }
           const newItem = {done: false, name: title, onList: true}
           props.setItemList([...props.itemList, newItem])
           setTitle("")
