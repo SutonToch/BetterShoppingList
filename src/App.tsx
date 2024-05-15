@@ -11,11 +11,16 @@ interface itemType {
   done: boolean,
   name: string,
   onList: boolean
+  doneAt: number
 }
+
+export const doneAtMax = 5000000000000 // roughly 80 years into the future
 
 export default function App() {
   const [scene, setScene] = useState("main");
-  const [allItemList, setAllItemList] = useState([])
+  const [allItemList, setAllItemList] = useState([
+    {done: false, name: "", onList: false, doneAt: doneAtMax}
+  ])
   const [currentItemDetails, setCrrentItemDetails] = useState({
     edit: false,
     title: ""
@@ -29,6 +34,19 @@ export default function App() {
       setAllItemList(allItems)
     })
     return unsubscribe
+  }, [])
+
+  useEffect(() => {
+    const oneHourInMs = 3600000;
+    const now = Date.now();
+    const updatedItemList = allItemList.map((item) => {
+      if(now - item.doneAt > oneHourInMs) {
+        return {...item, onList: false, done: false, doneAt: doneAtMax}
+      } else {
+        return item
+      }
+    })
+    setAllItemList(updatedItemList)
   }, [])
 
   useEffect(() => {

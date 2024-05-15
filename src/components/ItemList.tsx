@@ -1,6 +1,7 @@
 import { SetStateAction } from "react"
 import "./../styles/itemList.css"
 import { Delete, Edit, Plus } from "./Icons"
+import { doneAtMax } from "../App"
 
 interface ItemListProps {
     itemList:Array<any>
@@ -88,13 +89,20 @@ export default function ItemList(props:ItemListProps) {
   }
 
   function changeItemDone(e: any, targetDone: boolean) {
+    let newDoneAt = 0;
+    if(targetDone) {
+      newDoneAt = Date.now()
+    } else {
+      newDoneAt = doneAtMax
+    }
+
     const nameOfTickedItem = getClickedItemName(e);
     const newItemList = itemList.map((item) => {
       if(item.name !== nameOfTickedItem) {
         return item;
       }
 
-      return {...item, done: targetDone}
+      return {...item, done: targetDone, doneAt: newDoneAt}
     })
     props.setItemList(newItemList)
   }

@@ -2,6 +2,7 @@ import { SetStateAction, useState } from "react";
 import TitleRow from "./TitleRow";
 import "./../styles/addItem.css"
 import ArrowRight from "./../assets/icons/arrow-right.svg";
+import { doneAtMax } from "../App";
 
 interface NewItemProps {
     itemList:Array<any>
@@ -31,7 +32,7 @@ export default function NewItem(props:NewItemProps) {
           props.setItemList(newItemList)
           props.setScene("main")
         } else {
-          const newItem = {done: false, name: title, onList: true}
+          const newItem = {done: false, name: title, onList: true, doneAt: doneAtMax}
           props.setItemList([...props.itemList, newItem])
           setTitle("")
         }
