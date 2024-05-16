@@ -30,23 +30,22 @@ export default function App() {
     // get initial data from firebase and initialize itemList states
     const unsubscribe = onSnapshot(usersCollection, (snapshot) => {
       const dataArr = snapshot.docs.map(doc => ({...doc.data()}))
-      const allItems = dataArr[0].allItems
-      setAllItemList(allItems)
+      const allItems:itemType[] = dataArr[0].allItems
+      
+      //check and update done items
+      const oneHourInMs = 3600000;
+      const now = Date.now();
+      const updatedItemList = allItems.map((item) => {
+        if(now - item.doneAt > oneHourInMs) {
+          return {...item, onList: false, done: false, doneAt: doneAtMax}
+        } else {
+          return item
+        }
+      })
+
+      setAllItemList(updatedItemList)
     })
     return unsubscribe
-  }, [])
-
-  useEffect(() => {
-    const oneHourInMs = 3600000;
-    const now = Date.now();
-    const updatedItemList = allItemList.map((item) => {
-      if(now - item.doneAt > oneHourInMs) {
-        return {...item, onList: false, done: false, doneAt: doneAtMax}
-      } else {
-        return item
-      }
-    })
-    setAllItemList(updatedItemList)
   }, [])
 
   useEffect(() => {
