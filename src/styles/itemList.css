@@ -5,7 +5,7 @@
     margin-bottom: 24px;
 }
 
-.itemList:empty {
+.itemList:not(:has(li)) {
     display: none;
 }
 

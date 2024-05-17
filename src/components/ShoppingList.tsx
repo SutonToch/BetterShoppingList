@@ -33,12 +33,12 @@ export default function ShoppingList(props: ShoppingListProps) {
           setCurrentItemDetails={props.setCurrentItemDetails}
           mode={"done"}
         />
-        <div className="control-bar wrapper">
-          <button className="add-item-btn" onClick={() => props.setScene("addItem")}>
-            <Plus size={40}/>
-          </button>
-        </div>
       </main>
+      <div className="control-bar wrapper">
+        <button className="add-item-btn" onClick={() => props.setScene("addItem")}>
+          <Plus size={40}/>
+        </button>
+      </div>
       <div className="list-selection">
         <div className="list-selection-item active">Liste 1</div>
         
