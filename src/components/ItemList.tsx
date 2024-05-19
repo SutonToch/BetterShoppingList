@@ -82,7 +82,7 @@ export default function ItemList(props:ItemListProps) {
         return item;
       }
 
-      return {...item, onList: false}
+      return {...item, onList: false, done: false}
     })
     props.setItemList(newItemList)
 

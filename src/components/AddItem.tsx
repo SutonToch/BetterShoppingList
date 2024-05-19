@@ -29,17 +29,17 @@ export default function AddItem(props:AddItemProps) {
           setCurrentItemDetails={props.setCurrentItemDetails}
           mode={"add"}
         />
-        <button 
-          className="add-item-btn" 
-          style={{marginTop: "auto"}} 
-          onClick={() => {
-            props.setScene("newOrEditItem")
-            props.setCurrentItemDetails({edit: false, title: ""})
-          }}
-        >
-          <Plus size={40}/>
-        </button>
       </main>
+      <button 
+        className="add-item-btn add-to-list-btn" 
+        style={{marginTop: "auto"}} 
+        onClick={() => {
+          props.setScene("newOrEditItem")
+          props.setCurrentItemDetails({edit: false, title: ""})
+        }}
+      >
+        <Plus size={40}/>
+      </button>
     </>
   )
 }

@@ -37,6 +37,12 @@ main {
     margin-left: auto;
 }
 
+.add-to-list-btn {
+    position: relative;
+    bottom: 30px;
+    right: 20px;
+}
+
 .list-selection {
     display: flex;
     align-items: center;
