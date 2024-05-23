@@ -1,4 +1,4 @@
-import { SetStateAction } from "react"
+import { SetStateAction, useState } from "react"
 import "./../styles/itemList.css"
 import { Delete, Edit, Plus } from "./Icons"
 import { doneAtMax } from "../App"
@@ -15,6 +15,8 @@ interface ItemListProps {
 }
 
 export default function ItemList(props:ItemListProps) {
+  const [collapseDone, setCollapseDone] = useState(false);
+  
   const itemList = props.itemList;
   let reducedItemList = []
   switch (props.mode) {
@@ -31,7 +33,7 @@ export default function ItemList(props:ItemListProps) {
 
   const itemListElements = reducedItemList.map((item) => {
     return (
-        <li key={item.name}>
+        <li key={item.name} className="list-item">
             <p>{item.name}</p>
             {props.mode == undefined ?
               <div className="item-options">
@@ -128,8 +130,16 @@ export default function ItemList(props:ItemListProps) {
   return (
     <>
         <ul className="itemList wrapper">
-            {props.mode == "done" ? <p>zuletzt abgehakt</p> : ""}
-            {itemListElements}
+            {props.mode == "done" ? 
+            <div className="itemList-done-header">
+              <p>zuletzt abgehakt</p>
+              <div 
+                className={collapseDone ? "collapse-arrow done-collapsed" : "collapse-arrow done-open"}
+                onClick={() => setCollapseDone(prevState => !prevState)}
+              />
+            </div>
+            : ""}
+            {collapseDone ? <li></li> : itemListElements}
         </ul>
     </>
   )
