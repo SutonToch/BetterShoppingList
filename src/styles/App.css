@@ -1,0 +1,72 @@
+#app {
+    display: grid;
+    grid-template-rows: 50px auto 40px;
+    height: 100vh;
+    height: 100svh;
+    color: var(--clr-white);
+    background-color: var(--clr-background);
+}
+
+main {
+    padding: 0 4% 4%;
+    overflow: auto;
+    margin-bottom: 60px;
+}
+
+.control-bar {
+    display: flex;
+    padding: 8px;
+    border: 3px solid var(--clr-background);
+
+    position: fixed;
+    inset-inline: 4%;
+    bottom: 50px;
+}
+
+.add-item-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    color: inherit;
+    background-color: var(--clr-green);
+    border: none;
+    border-radius: 50%;
+    
+    margin-left: auto;
+}
+
+.add-to-list-btn {
+    position: relative;
+    bottom: 30px;
+    right: 20px;
+}
+
+.list-selection {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    font-size: 22px;
+    background-color: var(--clr-lighter-background);
+    border-top: 5px solid var(--clr-background);
+
+    position: fixed;
+    inset-inline: 0;
+    bottom: 0;
+    height: 40px;
+}
+
+.list-selection > .active {
+    color: var(--clr-green);
+    font-weight: bold;
+}
+
+.list-selection-item {
+    cursor: pointer;
+    width: 100%;
+}
+
+.list-selection-item:not(:last-child) {
+    border-right: 1px solid var(--clr-white);
+}

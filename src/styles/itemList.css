@@ -1,0 +1,80 @@
+.itemList {
+    list-style-type: none;
+    padding: 0;
+    min-height: 10px;
+    margin-bottom: 24px;
+}
+
+.itemList:empty,
+.itemList:not(:has(li)) {
+    display: none;
+}
+
+.itemList > .list-item {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    padding: 10px;
+    font-size: 16px;
+}
+
+.itemList-done-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+}
+
+.itemList-done-header > p {
+    font-size: 12px;
+}
+
+.collapse-arrow {
+    width: 12px;
+    height: 12px;
+    border-top: 2px solid var(--clr-white);
+    border-right: 2px solid var(--clr-white);
+    margin-right: 5px;
+    cursor: pointer;
+    transition: rotate 0.3s ease-in-out, translate 0.3s linear;
+}
+
+.done-collapsed {
+    rotate: -45deg;
+    translate: 0 5px;
+}
+
+.done-open {
+    rotate: 135deg;
+}
+
+.item-options {
+    display: flex;
+    justify-content: space-between;
+}
+
+.checkbox, .checkbox-checked {
+    width: 20px;
+    height: 20px;
+    background-color: var(--clr-white);
+    border-radius: 5px;
+    margin-top: 3px;
+    cursor: pointer;
+}
+
+.checkbox-checked {
+    background-color: var(--clr-green);
+}
+
+.add-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 25px;
+    height: 25px;
+    color: inherit;
+    margin-left: auto;
+    background-color: var(--clr-green);
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+}

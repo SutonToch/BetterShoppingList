@@ -1,0 +1,20 @@
+.title-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 4%;
+}
+
+.title {
+    font-size: 28px;
+    font-weight: normal;
+}
+
+.back-btn {
+    display: flex;
+    align-items: center;
+    border: none;
+    background-color: inherit;
+    color: var(--clr-white);
+    cursor: pointer;
+}
