@@ -14,6 +14,7 @@ interface ShoppingListProps {
 }
 
 export default function ShoppingList(props: ShoppingListProps) {
+  const onListNotDoneCount = props.allItemList.filter(item => item.onList && !item.done).length;
   return (
     <>
       <TitleRow 
@@ -40,7 +41,7 @@ export default function ShoppingList(props: ShoppingListProps) {
         </button>
       </div>
       <div className="list-selection">
-        <div className="list-selection-item active">Liste 1</div>
+        <div className="list-selection-item active">Liste 1 ({onListNotDoneCount})</div>
         
       </div>
     </>

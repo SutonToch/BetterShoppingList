@@ -27,6 +27,7 @@ export default function App() {
     edit: false,
     title: ""
   })
+  let allItemCountOnStartup = 0;
 
   useEffect(() => {
     // get initial data from firebase and initialize itemList states
@@ -63,6 +64,7 @@ export default function App() {
           return 0;
         })
 
+        allItemCountOnStartup = updatedItemList.length
         setAllItemList(updatedItemList)
     })
     return unsubscribe
@@ -72,8 +74,12 @@ export default function App() {
   useEffect(() => {
     if(uid) {
       const timeoutId = setTimeout(async () => {
-        const docRef = doc(db, "users", uid)
-        await setDoc(docRef, {allItems: allItemList}, {merge: true})
+        if(allItemList.length > 1 || allItemList.length > allItemCountOnStartup) {
+          const docRef = doc(db, "users", uid)
+          await setDoc(docRef, {allItems: allItemList}, {merge: true})
+        } else {
+          console.error("[WARNING] Atleast one item needs to remain in the list.")
+        }
       }, 3000)
       return () => clearTimeout(timeoutId)
     }
