@@ -1,3 +1,7 @@
+.icon {
+    display: flex;
+}
+
 .icon-btn {
     cursor: pointer;
 }
