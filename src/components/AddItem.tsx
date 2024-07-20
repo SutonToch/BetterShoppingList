@@ -38,15 +38,16 @@ export default function AddItem(props:AddItemProps) {
           mode={"add"}
         />
       </main>
-      <div>
+      <div className="add-item-search-wrapper">
         <input 
           type="search" 
           placeholder="Suchen..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
+          className="add-item-search"
         />
         <button 
-          className="add-item-btn add-to-list-btn" 
+          className="add-item-btn" 
           style={{marginTop: "auto"}} 
           onClick={() => {
             props.setScene("newOrEditItem")

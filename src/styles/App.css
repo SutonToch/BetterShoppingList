@@ -1,6 +1,6 @@
 #app {
     display: grid;
-    grid-template-rows: 50px auto 40px;
+    grid-template-rows: 50px auto 60px;
     height: 100vh;
     height: 100svh;
     color: var(--clr-white);
@@ -35,6 +35,19 @@ main {
     border-radius: 50%;
     
     margin-left: auto;
+}
+
+.add-item-search-wrapper {
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+    padding: 10px 20px;
+}
+
+.add-item-search {
+    text-align: center;
+    font-size: 1.1rem;
+    border-radius: 5px;
+    border: none;
 }
 
 .add-to-list-btn {
