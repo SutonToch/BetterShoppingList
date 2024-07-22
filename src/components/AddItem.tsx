@@ -1,4 +1,4 @@
-import { SetStateAction } from "react";
+import { SetStateAction, useState } from "react";
 import ItemList from "./ItemList";
 import TitleRow from "./TitleRow";
 import { Plus } from "./Icons";
@@ -14,6 +14,14 @@ interface AddItemProps {
 }
 
 export default function AddItem(props:AddItemProps) {
+  const [searchTerm, setSearchTerm] = useState("")
+  let itemList = props.itemList
+
+  if(searchTerm) {
+    itemList = itemList.filter(
+      (item) => item.name.toLowerCase().includes(searchTerm.toLowerCase())
+    )
+  }
 
   return (
     <>
@@ -23,23 +31,32 @@ export default function AddItem(props:AddItemProps) {
       />       
       <main>
         <ItemList 
-          itemList={props.itemList}
+          itemList={itemList}
           setItemList={props.setItemList}
           setScene={props.setScene}
           setCurrentItemDetails={props.setCurrentItemDetails}
           mode={"add"}
         />
       </main>
-      <button 
-        className="add-item-btn add-to-list-btn" 
-        style={{marginTop: "auto"}} 
-        onClick={() => {
-          props.setScene("newOrEditItem")
-          props.setCurrentItemDetails({edit: false, title: ""})
-        }}
-      >
-        <Plus size={40}/>
-      </button>
+      <div className="add-item-search-wrapper">
+        <input 
+          type="search" 
+          placeholder="Suchen..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="add-item-search"
+        />
+        <button 
+          className="add-item-btn" 
+          style={{marginTop: "auto"}} 
+          onClick={() => {
+            props.setScene("newOrEditItem")
+            props.setCurrentItemDetails({edit: false, title: ""})
+          }}
+        >
+          <Plus size={40}/>
+        </button>
+      </div>
     </>
   )
 }
