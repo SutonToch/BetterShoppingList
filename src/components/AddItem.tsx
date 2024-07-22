@@ -2,6 +2,7 @@ import { SetStateAction, useState } from "react";
 import ItemList from "./ItemList";
 import TitleRow from "./TitleRow";
 import { Plus } from "./Icons";
+import { itemType } from "../App";
 
 interface AddItemProps {
   itemList:Array<any>
@@ -23,6 +24,11 @@ export default function AddItem(props:AddItemProps) {
     )
   }
 
+  function setItemListAndClearSearchTerm(newItemList:itemType[]) {
+    setSearchTerm("")
+    props.setItemList(newItemList)
+  }
+
   return (
     <>
       <TitleRow 
@@ -32,7 +38,7 @@ export default function AddItem(props:AddItemProps) {
       <main>
         <ItemList 
           itemList={itemList}
-          setItemList={props.setItemList}
+          setItemList={setItemListAndClearSearchTerm}
           setScene={props.setScene}
           setCurrentItemDetails={props.setCurrentItemDetails}
           mode={"add"}

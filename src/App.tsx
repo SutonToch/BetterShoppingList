@@ -8,7 +8,7 @@ import { db } from './firebase.ts';
 import { collection, doc, onSnapshot, setDoc } from 'firebase/firestore';
 import './styles/App.css'
 
-interface itemType {
+export interface itemType {
   done: boolean,
   name: string,
   onList: boolean
