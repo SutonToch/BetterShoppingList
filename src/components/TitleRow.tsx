@@ -1,5 +1,6 @@
 import "./../styles/titleRow.css"
-import { ArrowLeft, VerticalDots } from "./Icons"
+import { ArrowLeft } from "./Icons"
+import SettingsDropdown from "./SettingsDropdown"
 
 interface TitleRowProps {
   title:string
@@ -16,7 +17,7 @@ export default function TitleRow(props:TitleRowProps) {
             </button> : ""
         }
         <h1 className="title">{props.title}</h1>
-        <VerticalDots />
+        <SettingsDropdown />
     </div>
   )
 }
