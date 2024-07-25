@@ -2,7 +2,6 @@ import { SetStateAction, useState } from "react";
 import ItemList from "./ItemList";
 import TitleRow from "./TitleRow";
 import { Plus } from "./Icons";
-import { itemType } from "../App";
 
 interface AddItemProps {
   itemList:Array<any>
@@ -16,17 +15,12 @@ interface AddItemProps {
 
 export default function AddItem(props:AddItemProps) {
   const [searchTerm, setSearchTerm] = useState("")
-  let itemList = props.itemList
-
+  
+  let filteredItemList = props.itemList
   if(searchTerm) {
-    itemList = itemList.filter(
+    filteredItemList = filteredItemList.filter(
       (item) => item.name.toLowerCase().includes(searchTerm.toLowerCase())
     )
-  }
-
-  function setItemListAndClearSearchTerm(newItemList:itemType[]) {
-    setSearchTerm("")
-    props.setItemList(newItemList)
   }
 
   return (
@@ -37,8 +31,9 @@ export default function AddItem(props:AddItemProps) {
       />       
       <main>
         <ItemList 
-          itemList={itemList}
-          setItemList={setItemListAndClearSearchTerm}
+          itemList={props.itemList}
+          filteredItemList={filteredItemList}
+          setItemList={props.setItemList}
           setScene={props.setScene}
           setCurrentItemDetails={props.setCurrentItemDetails}
           mode={"add"}

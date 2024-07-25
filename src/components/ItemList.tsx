@@ -5,6 +5,7 @@ import { doneAtMax } from "../App"
 
 interface ItemListProps {
     itemList:Array<any>
+    filteredItemList?:Array<any>
     setItemList:React.Dispatch<SetStateAction<any>>
     setScene:React.Dispatch<React.SetStateAction<string>>
     setCurrentItemDetails:React.Dispatch<React.SetStateAction<{
@@ -26,8 +27,13 @@ export default function ItemList(props:ItemListProps) {
     case "done": reducedItemList =
       itemList.filter((item) => item.onList && item.done)
       break;
-    case "add": reducedItemList = 
-      itemList.filter((item) => !item.onList)
+    case "add": 
+      if(props.filteredItemList) {
+        reducedItemList = props.filteredItemList.filter((item) => !item.onList)
+        break;
+      }
+      
+      reducedItemList = itemList.filter((item) => !item.onList)
       break;
   }
 
