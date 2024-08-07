@@ -2,14 +2,17 @@ import { useState } from "react"
 import "./../styles/settingsDropdown.css"
 import { VerticalDots } from "./Icons"
 
-interface SettingsDropdownProps {
-}
+interface SettingsDropdownProps {}
 
 export default function SettingsDropdown(props:SettingsDropdownProps) {
     const [showSettingsDropdown, setShowSettingsDropdown] = useState(false)
 
     function exportData() {
 
+    }
+
+    function importData() {
+        //https://www.codefrontend.com/file-upload-reactjs/
     }
 
   return (
@@ -26,7 +29,7 @@ export default function SettingsDropdown(props:SettingsDropdownProps) {
             >
                 <div className="settings-dropdown" onClick={(e) => e.stopPropagation()}>
                     <ul>
-                        <li onClick={() => {console.log("test")}}>Daten importieren</li>
+                        <li onClick={() => importData()}>Daten importieren</li>
                         <li onClick={() => exportData()}>Daten downloaden</li>
                     </ul>
                 </div>
