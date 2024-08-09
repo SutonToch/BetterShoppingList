@@ -1,18 +1,26 @@
 import { useState } from "react"
 import "./../styles/settingsDropdown.css"
 import { VerticalDots } from "./Icons"
+import FileSaver from "file-saver"
 
-interface SettingsDropdownProps {}
+interface SettingsDropdownProps {
+    allItemList:Array<any>
+}
 
 export default function SettingsDropdown(props:SettingsDropdownProps) {
     const [showSettingsDropdown, setShowSettingsDropdown] = useState(false)
 
-    function exportData() {
-
-    }
-
     function importData() {
         //https://www.codefrontend.com/file-upload-reactjs/
+    }
+
+    function exportData() {
+        const json = JSON.stringify(props.allItemList)
+        const blob = new Blob([json], {
+            type: 'application/octet-stream'
+        });
+
+        FileSaver.saveAs(blob, "data.json");
     }
 
   return (

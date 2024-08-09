@@ -17,7 +17,8 @@ export default function ShoppingList(props: ShoppingListProps) {
   const onListNotDoneCount = props.allItemList.filter(item => item.onList && !item.done).length;
   return (
     <>
-      <TitleRow 
+      <TitleRow
+        allItemList={props.allItemList}
         title="Liste 1"
       />
       <main>

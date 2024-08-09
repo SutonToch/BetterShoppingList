@@ -26,6 +26,7 @@ export default function AddItem(props:AddItemProps) {
   return (
     <>
       <TitleRow 
+        allItemList={props.itemList}
         title="Liste 1"
         backOnClick={() => props.setScene("main")}
       />       
