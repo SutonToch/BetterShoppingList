@@ -19,6 +19,7 @@ export default function ShoppingList(props: ShoppingListProps) {
     <>
       <TitleRow
         allItemList={props.allItemList}
+        setAllItemList={props.setAllItemList}
         title="Liste 1"
       />
       <main>
