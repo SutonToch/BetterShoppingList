@@ -40,7 +40,9 @@ export default function NewItem(props:NewItemProps) {
 
   return (
     <>
-        <TitleRow 
+        <TitleRow
+          allItemList={props.itemList}
+          setAllItemList={props.setItemList}
           title="Liste 1"
           backOnClick={() => props.setScene("main")}
         />       

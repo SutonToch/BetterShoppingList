@@ -12,6 +12,8 @@
 .auth-form {
     display: grid;
     padding-inline: 1em;
+    max-width: 600px;
+    margin-inline: auto;
 }
 
 .auth-form-input {
