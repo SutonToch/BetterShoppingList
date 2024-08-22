@@ -1,5 +1,5 @@
 
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import ShoppingList from './components/ShoppingList.tsx';
 import AddItem from './components/AddItem';
 import NewOrEditItem from './components/NewOrEditItem.tsx';
@@ -7,6 +7,7 @@ import Authentication from './components/Authentication.tsx';
 import { db } from './firebase.ts';
 import { collection, doc, onSnapshot, setDoc } from 'firebase/firestore';
 import './styles/App.css'
+import React from 'react';
 
 export interface itemType {
   done: boolean,
@@ -15,7 +16,32 @@ export interface itemType {
   doneAt: number
 }
 
+interface itemDetailsType {
+  edit: boolean;
+  title: string;
+}
+
+interface AppContextType  {
+  setScene: React.Dispatch<React.SetStateAction<string>>
+  allItemList: itemType[]
+  setAllItemList: React.Dispatch<React.SetStateAction<itemType[]>>
+  setCurrentItemDetails: React.Dispatch<React.SetStateAction<itemDetailsType>>
+}
+
 export const doneAtMax = 5000000000000 // roughly 80 years into the future
+
+const AppContext = React.createContext<AppContextType | null>(null);
+export const useAppContext = () => {
+  const currentAppContext = useContext(AppContext);
+
+  if (!currentAppContext) {
+    throw new Error(
+      "currentAppContext has to be used within <AppContext.Provider>"
+    );
+  }
+
+  return currentAppContext;
+};
 
 export default function App() {
   const [scene, setScene] = useState("auth");
@@ -23,7 +49,7 @@ export default function App() {
   const [allItemList, setAllItemList] = useState([
     {done: false, name: "", onList: false, doneAt: doneAtMax}
   ])
-  const [currentItemDetails, setCrrentItemDetails] = useState({
+  const [currentItemDetails, setCurrentItemDetails] = useState({
     edit: false,
     title: ""
   })
@@ -86,38 +112,26 @@ export default function App() {
   }, [allItemList, uid])
 
   return (
-    <div id="app">
-      {scene == "auth" ?
-        <Authentication 
-          setScene={setScene}
-          setUid={setUid}
-        /> 
-      : ""}
-      {scene == "main" ? 
-        <ShoppingList 
-          allItemList={allItemList}
-          setAllItemList={setAllItemList}
-          setScene={setScene}
-          setCurrentItemDetails={setCrrentItemDetails}
-        />
-      : ""}
-      {scene == "addItem" ? 
-        <AddItem 
-          itemList={allItemList}
-          setItemList={setAllItemList}
-          setScene={setScene}
-          setCurrentItemDetails={setCrrentItemDetails}
-        /> 
-      : ""}
-      {scene == "newOrEditItem" ?
-        <NewOrEditItem 
-          itemList={allItemList}
-          setItemList={setAllItemList}
-          setScene={setScene}
-          title={currentItemDetails.title}
-          edit={currentItemDetails.edit}
-        /> 
-      : ""}
-    </div>
+    <AppContext.Provider value={{setScene, allItemList, setAllItemList, setCurrentItemDetails}}>
+      <div id="app">
+        {scene == "auth" ?
+          <Authentication
+            setUid={setUid}
+          /> 
+        : ""}
+        {scene == "main" ? 
+          <ShoppingList />
+        : ""}
+        {scene == "addItem" ? 
+          <AddItem /> 
+        : ""}
+        {scene == "newOrEditItem" ?
+          <NewOrEditItem
+            title={currentItemDetails.title}
+            edit={currentItemDetails.edit}
+          /> 
+        : ""}
+      </div>
+    </AppContext.Provider>
   )
 }

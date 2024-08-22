@@ -1,24 +1,18 @@
-import { SetStateAction, useState } from "react"
 import "./../styles/itemList.css"
 import { Delete, Edit, Plus } from "./Icons"
-import { doneAtMax } from "../App"
+import { doneAtMax, useAppContext } from "../App"
+import { useState } from "react"
 
 interface ItemListProps {
-    itemList:Array<any>
     filteredItemList?:Array<any>
-    setItemList:React.Dispatch<SetStateAction<any>>
-    setScene:React.Dispatch<React.SetStateAction<string>>
-    setCurrentItemDetails:React.Dispatch<React.SetStateAction<{
-      edit: boolean;
-      title: string;
-    }>>
     mode?:string
 }
 
 export default function ItemList(props:ItemListProps) {
   const [collapseDone, setCollapseDone] = useState(false);
+  const {allItemList, setAllItemList, setCurrentItemDetails, setScene} = useAppContext()
   
-  const itemList = props.itemList;
+  const itemList = allItemList;
   let reducedItemList = []
   switch (props.mode) {
     case undefined: reducedItemList = 
@@ -76,11 +70,11 @@ export default function ItemList(props:ItemListProps) {
 
   function openEditItem(e: any) {
     const nameOfTickedItem = getClickedItemName(e);
-    props.setCurrentItemDetails({
+    setCurrentItemDetails({
       edit: true,
       title: nameOfTickedItem
     })
-    props.setScene("newOrEditItem")
+    setScene("newOrEditItem")
   }
 
   function unlistItem(e: any) {
@@ -92,7 +86,7 @@ export default function ItemList(props:ItemListProps) {
 
       return {...item, onList: false, done: false}
     })
-    props.setItemList(newItemList)
+    setAllItemList(newItemList)
 
   }
 
@@ -112,13 +106,13 @@ export default function ItemList(props:ItemListProps) {
 
       return {...item, done: targetDone, doneAt: newDoneAt}
     })
-    props.setItemList(newItemList)
+    setAllItemList(newItemList)
   }
 
   function deleteItem(e: any) {
     const nameOfTickedItem = getClickedItemName(e);
     const newItemList = itemList.filter((item) => item.name != nameOfTickedItem)
-    props.setItemList(newItemList)
+    setAllItemList(newItemList)
   }
 
   function addToList(e: any) {
@@ -130,7 +124,7 @@ export default function ItemList(props:ItemListProps) {
 
       return {...item, onList: true}
     })
-    props.setItemList(newItemList)
+    setAllItemList(newItemList)
   }
 
   return (

@@ -1,19 +1,17 @@
-import { SetStateAction, useState } from "react";
+import { useState } from "react";
 import TitleRow from "./TitleRow";
 import "./../styles/addItem.css"
 import ArrowRight from "./../assets/icons/arrow-right.svg";
-import { doneAtMax } from "../App";
+import { doneAtMax, useAppContext } from "../App";
 
 interface NewItemProps {
-    itemList:Array<any>
-    setItemList:React.Dispatch<SetStateAction<any>>
-    setScene:React.Dispatch<React.SetStateAction<string>>
     title:string
     edit: boolean
 }
 
 export default function NewItem(props:NewItemProps) {
     const [title, setTitle] = useState(props.title);
+    const {allItemList, setAllItemList, setScene} = useAppContext()
 
     function submitItemListChange(e:React.FormEvent<HTMLFormElement>) {
         e.preventDefault()
@@ -23,17 +21,17 @@ export default function NewItem(props:NewItemProps) {
         }
 
         if(props.edit) {
-          const newItemList = props.itemList.map((item) => {
+          const newItemList = allItemList.map((item) => {
             if(item.name !== props.title) {
               return item;
             }
             return {...item, name: title}
           })
-          props.setItemList(newItemList)
-          props.setScene("main")
+          setAllItemList(newItemList)
+          setScene("main")
         } else {
           const newItem = {done: false, name: title, onList: true, doneAt: doneAtMax}
-          props.setItemList([...props.itemList, newItem])
+          setAllItemList([...allItemList, newItem])
           setTitle("")
         }
     }
@@ -41,10 +39,8 @@ export default function NewItem(props:NewItemProps) {
   return (
     <>
         <TitleRow
-          allItemList={props.itemList}
-          setAllItemList={props.setItemList}
           title="Liste 1"
-          backOnClick={() => props.setScene("main")}
+          backOnClick={() => setScene("main")}
         />       
         <form onSubmit={(e) => submitItemListChange(e)} className="add-item-form">
           <input 

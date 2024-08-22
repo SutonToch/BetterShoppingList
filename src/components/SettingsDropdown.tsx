@@ -1,14 +1,11 @@
-import { ChangeEvent, SetStateAction, useEffect, useRef, useState } from "react"
+import { ChangeEvent, useEffect, useRef, useState } from "react"
 import "./../styles/settingsDropdown.css"
 import { VerticalDots } from "./Icons"
 import FileSaver from "file-saver"
+import { useAppContext } from "../App"
 
-interface SettingsDropdownProps {
-    allItemList:Array<any>
-    setAllItemList:React.Dispatch<SetStateAction<any>>
-}
-
-export default function SettingsDropdown(props:SettingsDropdownProps) {
+export default function SettingsDropdown() {
+    const {allItemList, setAllItemList} = useAppContext()
     const [showSettingsDropdown, setShowSettingsDropdown] = useState(false)
     const [file, setFile] = useState<File>();
     const inputRef = useRef<HTMLInputElement | null>(null);
@@ -39,13 +36,13 @@ export default function SettingsDropdown(props:SettingsDropdownProps) {
             },
           })
             .then((res) => res.json())
-            .then((data) => props.setAllItemList(data.json))
+            .then((data) => setAllItemList(data.json))
             .then(() => setFile(undefined))
             .catch((err) => console.error(err));
     }, [file])
 
     function downloadData() {
-        const json = JSON.stringify(props.allItemList)
+        const json = JSON.stringify(allItemList)
         const blob = new Blob([json], {
             type: 'application/octet-stream'
         });

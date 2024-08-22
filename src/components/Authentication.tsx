@@ -1,14 +1,15 @@
 import { useState } from "react"
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import "./../styles/authentication.css"
+import { useAppContext } from "../App";
 
 interface AuthenticationProps {
-    setScene:React.Dispatch<React.SetStateAction<string>>
     setUid:React.Dispatch<React.SetStateAction<string>>
 }
 
 export default function Authentication(props:AuthenticationProps) {
     const [email, setEmail] = useState("")
+    const {setScene} = useAppContext()
     
     const auth = getAuth();
 
@@ -18,7 +19,7 @@ export default function Authentication(props:AuthenticationProps) {
             .then((userCredential) => {
               props.setUid(userCredential.user.uid)
             })
-            .then(() => {props.setScene("main")})
+            .then(() => {setScene("main")})
             .catch((error) => {
               const errorCode = error.code;
               const errorMessage = error.message;
