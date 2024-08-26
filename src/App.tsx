@@ -27,6 +27,7 @@ interface AppContextType  {
   allItemList: itemType[]
   setAllItemList: React.Dispatch<React.SetStateAction<itemType[]>>
   setCurrentItemDetails: React.Dispatch<React.SetStateAction<itemDetailsType>>
+  allLists: string[]
   activeList: string
 }
 
@@ -55,8 +56,8 @@ export default function App() {
     edit: false,
     title: ""
   })
+  const [allLists, setAllLists] = useState(["Liste1"])
   const [activeList, setActiveList] = useState("")
-  let uniqueLists:string[] = []
   let allItemCountOnStartup = 0;
 
   //INITIAL SETUP
@@ -67,27 +68,26 @@ export default function App() {
       
       const unsubscribe = onSnapshot(userCollection, (snapshot) => {
         const dataArr = snapshot.docs.map(doc => ({...doc.data()}))
-        const allItems:itemType[] = dataArr.filter((doc) => {
+        const userData = dataArr.filter((doc) => {
           if(doc.uid == uid) {
             return true;
           }
-        })[0].allItems
+        })[0]
+        const allItems:itemType[] = userData.allItems
+        const allDatabaseLists:string[] = userData.allLists
+        setAllLists(allDatabaseLists)
+        setActiveList(allDatabaseLists[0])
         
         //check and update done items + get lists
         const oneHourInMs = 3600000;
         const now = Date.now();
-        let tempUniqueLists = new Set<string>();
         const updatedItemList = allItems.map((item) => {
-          item.lists.forEach((list) => tempUniqueLists.add(list))
-
           if(now - item.doneAt > oneHourInMs) {
             return {...item, onList: false, done: false, doneAt: doneAtMax}
           } else {
             return item
           }
         })
-        tempUniqueLists.forEach((value) => uniqueLists.push(value))
-        setActiveList(uniqueLists[0])
 
         updatedItemList.sort((a,b) => {
           const nameA = a.name.toUpperCase();
@@ -123,7 +123,7 @@ export default function App() {
   }, [allItemList, uid])
 
   function updateActiveList(newActiveList:string) {
-    if(!uniqueLists.includes(newActiveList)) {
+    if(!allLists.includes(newActiveList)) {
       console.error("Could not update active list because " + newActiveList + " is an unknown list.")
       return;
     }
@@ -132,7 +132,7 @@ export default function App() {
 
   return (
     <AppContext.Provider 
-      value={{setScene, allItemList, setAllItemList, setCurrentItemDetails, activeList}}
+      value={{setScene, allItemList, setAllItemList, setCurrentItemDetails, allLists, activeList}}
     >
       <div id="app">
         {scene == "auth" ? <Authentication setUid={setUid} /> : ""}
