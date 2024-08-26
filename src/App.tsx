@@ -31,7 +31,7 @@ interface AppContextType  {
 export const doneAtMax = 5000000000000 // roughly 80 years into the future
 
 const AppContext = React.createContext<AppContextType | null>(null);
-export const useAppContext = () => {
+export function useAppContext() {
   const currentAppContext = useContext(AppContext);
 
   if (!currentAppContext) {
@@ -55,6 +55,7 @@ export default function App() {
   })
   let allItemCountOnStartup = 0;
 
+  //INITIAL SETUP
   useEffect(() => {
     // get initial data from firebase and initialize itemList states
     if(uid) {
@@ -97,6 +98,7 @@ export default function App() {
     }
   }, [uid])
 
+  // UPDATE DATABASE
   useEffect(() => {
     if(uid) {
       const timeoutId = setTimeout(async () => {
@@ -114,17 +116,9 @@ export default function App() {
   return (
     <AppContext.Provider value={{setScene, allItemList, setAllItemList, setCurrentItemDetails}}>
       <div id="app">
-        {scene == "auth" ?
-          <Authentication
-            setUid={setUid}
-          /> 
-        : ""}
-        {scene == "main" ? 
-          <ShoppingList />
-        : ""}
-        {scene == "addItem" ? 
-          <AddItem /> 
-        : ""}
+        {scene == "auth" ? <Authentication setUid={setUid} /> : ""}
+        {scene == "main" ? <ShoppingList /> : ""}
+        {scene == "addItem" ? <AddItem /> : ""}
         {scene == "newOrEditItem" ?
           <NewOrEditItem
             title={currentItemDetails.title}

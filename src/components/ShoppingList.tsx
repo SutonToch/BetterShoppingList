@@ -10,14 +10,10 @@ export default function ShoppingList() {
   const onListNotDoneCount = allItemList.filter(item => item.onList && !item.done).length;
   return (
     <>
-      <TitleRow
-        title="Liste 1"
-      />
+      <TitleRow title="Liste 1" />
       <main>
         <ItemList />
-        <ItemList
-          mode={"done"}
-        />
+        <ItemList mode={"done"} />
       </main>
       <div className="control-bar wrapper">
         <button className="add-item-btn" onClick={() => setScene("addItem")}>
