@@ -12,8 +12,9 @@ import React from 'react';
 export interface itemType {
   done: boolean,
   name: string,
-  onList: boolean
-  doneAt: number
+  onList: boolean,
+  doneAt: number,
+  lists: string[]
 }
 
 interface itemDetailsType {
@@ -26,6 +27,7 @@ interface AppContextType  {
   allItemList: itemType[]
   setAllItemList: React.Dispatch<React.SetStateAction<itemType[]>>
   setCurrentItemDetails: React.Dispatch<React.SetStateAction<itemDetailsType>>
+  activeList: string
 }
 
 export const doneAtMax = 5000000000000 // roughly 80 years into the future
@@ -47,12 +49,14 @@ export default function App() {
   const [scene, setScene] = useState("auth");
   const [uid, setUid] = useState("")
   const [allItemList, setAllItemList] = useState([
-    {done: false, name: "", onList: false, doneAt: doneAtMax}
+    {done: false, name: "", onList: false, doneAt: doneAtMax, lists: [""]}
   ])
   const [currentItemDetails, setCurrentItemDetails] = useState({
     edit: false,
     title: ""
   })
+  const [activeList, setActiveList] = useState("")
+  let uniqueLists:string[] = []
   let allItemCountOnStartup = 0;
 
   //INITIAL SETUP
@@ -69,16 +73,21 @@ export default function App() {
           }
         })[0].allItems
         
-        //check and update done items
+        //check and update done items + get lists
         const oneHourInMs = 3600000;
         const now = Date.now();
+        let tempUniqueLists = new Set<string>();
         const updatedItemList = allItems.map((item) => {
+          item.lists.forEach((list) => tempUniqueLists.add(list))
+
           if(now - item.doneAt > oneHourInMs) {
             return {...item, onList: false, done: false, doneAt: doneAtMax}
           } else {
             return item
           }
         })
+        tempUniqueLists.forEach((value) => uniqueLists.push(value))
+        setActiveList(uniqueLists[0])
 
         updatedItemList.sort((a,b) => {
           const nameA = a.name.toUpperCase();
@@ -113,8 +122,18 @@ export default function App() {
     }
   }, [allItemList, uid])
 
+  function updateActiveList(newActiveList:string) {
+    if(!uniqueLists.includes(newActiveList)) {
+      console.error("Could not update active list because " + newActiveList + " is an unknown list.")
+      return;
+    }
+    setActiveList(newActiveList)
+  }
+
   return (
-    <AppContext.Provider value={{setScene, allItemList, setAllItemList, setCurrentItemDetails}}>
+    <AppContext.Provider 
+      value={{setScene, allItemList, setAllItemList, setCurrentItemDetails, activeList}}
+    >
       <div id="app">
         {scene == "auth" ? <Authentication setUid={setUid} /> : ""}
         {scene == "main" ? <ShoppingList /> : ""}

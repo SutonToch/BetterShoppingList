@@ -6,11 +6,11 @@ import { useAppContext } from "../App";
 
 
 export default function ShoppingList() {
-  const {allItemList, setScene} = useAppContext()
+  const {allItemList, setScene, activeList} = useAppContext()
   const onListNotDoneCount = allItemList.filter(item => item.onList && !item.done).length;
   return (
     <>
-      <TitleRow title="Liste 1" />
+      <TitleRow title={activeList} />
       <main>
         <ItemList />
         <ItemList mode={"done"} />
@@ -21,7 +21,7 @@ export default function ShoppingList() {
         </button>
       </div>
       <div className="list-selection">
-        <div className="list-selection-item active">Liste 1 ({onListNotDoneCount})</div>
+        <div className="list-selection-item active">{activeList} ({onListNotDoneCount})</div>
         
       </div>
     </>

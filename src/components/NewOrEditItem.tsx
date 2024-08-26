@@ -11,7 +11,7 @@ interface NewItemProps {
 
 export default function NewItem(props:NewItemProps) {
     const [title, setTitle] = useState(props.title);
-    const {allItemList, setAllItemList, setScene} = useAppContext()
+    const {allItemList, setAllItemList, setScene, activeList} = useAppContext()
 
     function submitItemListChange(e:React.FormEvent<HTMLFormElement>) {
         e.preventDefault()
@@ -30,7 +30,13 @@ export default function NewItem(props:NewItemProps) {
           setAllItemList(newItemList)
           setScene("main")
         } else {
-          const newItem = {done: false, name: title, onList: true, doneAt: doneAtMax}
+          const newItem = {
+            done: false, 
+            name: title, 
+            onList: true, 
+            doneAt: doneAtMax, 
+            lists: [activeList]
+          }
           setAllItemList([...allItemList, newItem])
           setTitle("")
         }
@@ -39,7 +45,7 @@ export default function NewItem(props:NewItemProps) {
   return (
     <>
         <TitleRow
-          title="Liste 1"
+          title={activeList}
           backOnClick={() => setScene("main")}
         />       
         <form onSubmit={(e) => submitItemListChange(e)} className="add-item-form">

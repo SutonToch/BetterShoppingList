@@ -6,7 +6,7 @@ import { useAppContext } from "../App";
 
 export default function AddItem() {
   const [searchTerm, setSearchTerm] = useState("")
-  const {allItemList, setCurrentItemDetails, setScene} = useAppContext()
+  const {allItemList, setCurrentItemDetails, setScene, activeList} = useAppContext()
   
   let filteredItemList = allItemList
   if(searchTerm) {
@@ -18,7 +18,7 @@ export default function AddItem() {
   return (
     <>
       <TitleRow
-        title="Liste 1"
+        title={activeList}
         backOnClick={() => setScene("main")}
       />       
       <main>
