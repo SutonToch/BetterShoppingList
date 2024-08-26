@@ -122,13 +122,15 @@ export default function App() {
     }
   }, [allItemList, uid])
 
-  function updateActiveList(newActiveList:string) {
-    if(!allLists.includes(newActiveList)) {
-      console.error("Could not update active list because " + newActiveList + " is an unknown list.")
-      return;
+  useEffect(() => {
+    if(uid) {
+      const timeoutId = setTimeout(async () => {
+        const docRef = doc(db, "users", uid)
+        await setDoc(docRef, {allLists: allLists}, {merge: true})
+      }, 3000)
+      return () => clearTimeout(timeoutId)
     }
-    setActiveList(newActiveList)
-  }
+  }, [allLists, uid])
 
   return (
     <AppContext.Provider 
@@ -136,7 +138,12 @@ export default function App() {
     >
       <div id="app">
         {scene == "auth" ? <Authentication setUid={setUid} /> : ""}
-        {scene == "main" ? <ShoppingList /> : ""}
+        {scene == "main" ? 
+          <ShoppingList 
+            setAllLists={setAllLists} 
+            setActiveList={setActiveList}
+          /> 
+        : ""}
         {scene == "addItem" ? <AddItem /> : ""}
         {scene == "newOrEditItem" ?
           <NewOrEditItem
