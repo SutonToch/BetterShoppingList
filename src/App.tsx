@@ -24,11 +24,11 @@ interface itemDetailsType {
 
 interface AppContextType  {
   setScene: React.Dispatch<React.SetStateAction<string>>
-  allItemList: itemType[]
-  setAllItemList: React.Dispatch<React.SetStateAction<itemType[]>>
+  allItems: itemType[]
+  setAllItems: React.Dispatch<React.SetStateAction<itemType[]>>
   setCurrentItemDetails: React.Dispatch<React.SetStateAction<itemDetailsType>>
-  allLists: string[]
-  activeList: string
+  allListNames: string[]
+  activeListName: string
 }
 
 export const doneAtMax = 5000000000000 // roughly 80 years into the future
@@ -49,18 +49,18 @@ export function useAppContext() {
 export default function App() {
   const [scene, setScene] = useState("auth");
   const [uid, setUid] = useState("")
-  const [allItemList, setAllItemList] = useState([
+  const [allItems, setAllItems] = useState([
     {done: false, name: "", onList: false, doneAt: doneAtMax, lists: [""]}
   ])
   const [currentItemDetails, setCurrentItemDetails] = useState({
     edit: false,
     title: ""
   })
-  const [allLists, setAllLists] = useState(["Liste1"])
-  const [activeList, setActiveList] = useState("")
+  const [allListNames, setAllListNames] = useState(["Liste1"])
+  const [activeListName, setActiveList] = useState("Liste1")
   let allItemCountOnStartup = 0;
 
-  //INITIAL SETUP
+  //runs every time the database is updated
   useEffect(() => {
     // get initial data from firebase and initialize itemList states
     if(uid) {
@@ -75,10 +75,9 @@ export default function App() {
         })[0]
         const allItems:itemType[] = userData.allItems
         const allDatabaseLists:string[] = userData.allLists
-        setAllLists(allDatabaseLists)
-        setActiveList(allDatabaseLists[0])
+        setAllListNames(allDatabaseLists)
         
-        //check and update done items + get lists
+        //check and update done items
         const oneHourInMs = 3600000;
         const now = Date.now();
         const updatedItemList = allItems.map((item) => {
@@ -101,7 +100,7 @@ export default function App() {
         })
 
         allItemCountOnStartup = updatedItemList.length
-        setAllItemList(updatedItemList)
+        setAllItems(updatedItemList)
     })
     return unsubscribe
     }
@@ -111,36 +110,36 @@ export default function App() {
   useEffect(() => {
     if(uid) {
       const timeoutId = setTimeout(async () => {
-        if(allItemList.length > 1 || allItemList.length > allItemCountOnStartup) {
+        if(allItems.length > 1 || allItems.length > allItemCountOnStartup) {
           const docRef = doc(db, "users", uid)
-          await setDoc(docRef, {allItems: allItemList}, {merge: true})
+          await setDoc(docRef, {allItems: allItems}, {merge: true})
         } else {
           console.error("[WARNING] Atleast one item needs to remain in the list.")
         }
       }, 3000)
       return () => clearTimeout(timeoutId)
     }
-  }, [allItemList, uid])
+  }, [allItems, uid])
 
   useEffect(() => {
     if(uid) {
       const timeoutId = setTimeout(async () => {
         const docRef = doc(db, "users", uid)
-        await setDoc(docRef, {allLists: allLists}, {merge: true})
+        await setDoc(docRef, {allLists: allListNames}, {merge: true})
       }, 3000)
       return () => clearTimeout(timeoutId)
     }
-  }, [allLists, uid])
+  }, [allListNames, uid])
 
   return (
     <AppContext.Provider 
-      value={{setScene, allItemList, setAllItemList, setCurrentItemDetails, allLists, activeList}}
+      value={{setScene, allItems, setAllItems, setCurrentItemDetails, allListNames, activeListName}}
     >
       <div id="app">
         {scene == "auth" ? <Authentication setUid={setUid} /> : ""}
         {scene == "main" ? 
           <ShoppingList 
-            setAllLists={setAllLists} 
+            setAllListNames={setAllListNames} 
             setActiveList={setActiveList}
           /> 
         : ""}

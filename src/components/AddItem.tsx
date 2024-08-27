@@ -6,9 +6,9 @@ import { useAppContext } from "../App";
 
 export default function AddItem() {
   const [searchTerm, setSearchTerm] = useState("")
-  const {allItemList, setCurrentItemDetails, setScene, activeList} = useAppContext()
+  const {allItems, setCurrentItemDetails, setScene, activeListName} = useAppContext()
   
-  let filteredItemList = allItemList
+  let filteredItemList = allItems.filter((item) => {return item.lists.includes(activeListName)})
   if(searchTerm) {
     filteredItemList = filteredItemList.filter(
       (item) => item.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -18,7 +18,7 @@ export default function AddItem() {
   return (
     <>
       <TitleRow
-        title={activeList}
+        title={activeListName}
         backOnClick={() => setScene("main")}
       />       
       <main>

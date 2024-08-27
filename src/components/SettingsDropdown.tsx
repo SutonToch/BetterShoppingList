@@ -5,7 +5,7 @@ import FileSaver from "file-saver"
 import { useAppContext } from "../App"
 
 export default function SettingsDropdown() {
-    const {allItemList, setAllItemList} = useAppContext()
+    const {allItems, setAllItems} = useAppContext()
     const [showSettingsDropdown, setShowSettingsDropdown] = useState(false)
     const [file, setFile] = useState<File>();
     const inputRef = useRef<HTMLInputElement | null>(null);
@@ -36,13 +36,13 @@ export default function SettingsDropdown() {
             },
           })
             .then((res) => res.json())
-            .then((data) => setAllItemList(data.json))
+            .then((data) => setAllItems(data.json))
             .then(() => setFile(undefined))
             .catch((err) => console.error(err));
     }, [file])
 
     function downloadData() {
-        const json = JSON.stringify(allItemList)
+        const json = JSON.stringify(allItems)
         const blob = new Blob([json], {
             type: 'application/octet-stream'
         });
