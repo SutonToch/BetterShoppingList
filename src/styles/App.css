@@ -80,6 +80,8 @@ main {
 .list-selection-item {
     cursor: pointer;
     width: 100%;
+    background-color: var(--bg-color);
+    transition: background-color 4s linear;
 }
 
 .list-selection-item:not(:last-child) {

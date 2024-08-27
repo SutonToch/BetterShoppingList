@@ -11,19 +11,26 @@ interface ShoppingListProps {
 
 export default function ShoppingList(props:ShoppingListProps) {
   const {allItems, setScene, allListNames, activeListName} = useAppContext()
+  const [listWithActiveMouseDown, setListWithActiveMouseDown] = useState("")
   const [timeoutToDeleteList, setTimeoutToDeleteList] = useState<NodeJS.Timeout | null>(null);
   
   const listElements = allListNames.map((listName, index) => {
     const listNameWithWhitespace = listName.slice(0, -1) + " " + listName.slice(-1);
     const isActiveList = (listName == activeListName)
-    const onListNotDoneCount = allItems.filter(item => item.onList && !item.done && item.lists.includes(listName)).length;
+    const onListNotDoneCount = allItems.filter(item => 
+      item.onList && !item.done && item.lists.includes(listName)).length;
+
     return(
       <div 
         className={isActiveList ? "list-selection-item active" : "list-selection-item"}
+        style={{backgroundColor: timeoutToDeleteList && listName == listWithActiveMouseDown ? "red" : "" }}
         onClick={() => updateActiveList(listName)}
-        onMouseDown={() => removeList(listName)}
-        onMouseUp={() => {timeoutToDeleteList ? clearTimeout(timeoutToDeleteList) : ""}}
-        onMouseOut={() => {timeoutToDeleteList ? clearTimeout(timeoutToDeleteList) : ""}}
+        onMouseDown={() => {
+          removeList(listName)
+          setListWithActiveMouseDown(listName)
+        }}
+        onMouseUp={() => {timeoutToDeleteList ? abortRemoveList(timeoutToDeleteList) : ""}}
+        onMouseOut={() => {timeoutToDeleteList ? abortRemoveList(timeoutToDeleteList) : ""}}
         key={index}
       >
         {listNameWithWhitespace} ({onListNotDoneCount})
@@ -61,6 +68,15 @@ export default function ShoppingList(props:ShoppingListProps) {
       props.setAllListNames(updatedLists)
     }, 4000)
     setTimeoutToDeleteList(timeout);
+  }
+
+  function abortRemoveList(timeoutToDeleteList: NodeJS.Timeout | null) {
+    if(!timeoutToDeleteList) {
+      return;
+    }
+
+    clearTimeout(timeoutToDeleteList)
+    setTimeoutToDeleteList(null)
   }
   
   return (
