@@ -8,6 +8,8 @@ interface TitleRowProps {
 }
 
 export default function TitleRow(props:TitleRowProps) {
+  const title = props.title;
+  const titleWithWhitespace = title.slice(0, -1) + " " + title.slice(-1);
 
   return (
     <div className="title-row">
@@ -16,7 +18,7 @@ export default function TitleRow(props:TitleRowProps) {
                 <ArrowLeft />
             </button> : ""
         }
-        <h1 className="title">{props.title}</h1>
+        <h1 className="title">{titleWithWhitespace}</h1>
         <SettingsDropdown />
     </div>
   )

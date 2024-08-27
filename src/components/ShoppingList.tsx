@@ -14,6 +14,7 @@ export default function ShoppingList(props:ShoppingListProps) {
   const [timeoutToDeleteList, setTimeoutToDeleteList] = useState<NodeJS.Timeout | null>(null);
   
   const listElements = allListNames.map((listName, index) => {
+    const listNameWithWhitespace = listName.slice(0, -1) + " " + listName.slice(-1);
     const isActiveList = (listName == activeListName)
     const onListNotDoneCount = allItems.filter(item => item.onList && !item.done && item.lists.includes(listName)).length;
     return(
@@ -25,7 +26,7 @@ export default function ShoppingList(props:ShoppingListProps) {
         onMouseOut={() => {timeoutToDeleteList ? clearTimeout(timeoutToDeleteList) : ""}}
         key={index}
       >
-        {listName} ({onListNotDoneCount})
+        {listNameWithWhitespace} ({onListNotDoneCount})
       </div>
     )
   })
