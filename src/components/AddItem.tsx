@@ -21,7 +21,10 @@ export default function AddItem() {
         title={activeListName}
         backOnClick={() => setScene("main")}
       />       
-      <main>
+      <main
+        //temporary work-around for a strange style issue on mobile. Further tests required.
+        style={searchTerm ? {height: "270px"} : {height: "auto"}}
+      >
         <ItemList
           filteredItemList={filteredItemList}
           mode={"add"}
