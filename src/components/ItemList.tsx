@@ -1,31 +1,24 @@
-import { SetStateAction, useState } from "react"
 import "./../styles/itemList.css"
 import { Delete, Edit, Plus } from "./Icons"
-import { doneAtMax } from "../App"
+import { doneAtMax, useAppContext } from "../App"
+import { useState } from "react"
 
 interface ItemListProps {
-    itemList:Array<any>
     filteredItemList?:Array<any>
-    setItemList:React.Dispatch<SetStateAction<any>>
-    setScene:React.Dispatch<React.SetStateAction<string>>
-    setCurrentItemDetails:React.Dispatch<React.SetStateAction<{
-      edit: boolean;
-      title: string;
-    }>>
     mode?:string
 }
 
 export default function ItemList(props:ItemListProps) {
   const [collapseDone, setCollapseDone] = useState(false);
+  const {allItems, setAllItems, setCurrentItemDetails, setScene, activeListName} = useAppContext()
   
-  const itemList = props.itemList;
-  let reducedItemList = []
+  let reducedItemList = allItems.filter((item) => {return item.lists.includes(activeListName)});
   switch (props.mode) {
     case undefined: reducedItemList = 
-      itemList.filter((item) => item.onList && !item.done)
+      reducedItemList.filter((item) => item.onList && !item.done)
       break;
     case "done": reducedItemList =
-      itemList.filter((item) => item.onList && item.done)
+      reducedItemList.filter((item) => item.onList && item.done)
       break;
     case "add": 
       if(props.filteredItemList) {
@@ -33,7 +26,7 @@ export default function ItemList(props:ItemListProps) {
         break;
       }
       
-      reducedItemList = itemList.filter((item) => !item.onList)
+      reducedItemList = reducedItemList.filter((item) => !item.onList)
       break;
   }
 
@@ -76,24 +69,23 @@ export default function ItemList(props:ItemListProps) {
 
   function openEditItem(e: any) {
     const nameOfTickedItem = getClickedItemName(e);
-    props.setCurrentItemDetails({
+    setCurrentItemDetails({
       edit: true,
       title: nameOfTickedItem
     })
-    props.setScene("newOrEditItem")
+    setScene("newOrEditItem")
   }
 
   function unlistItem(e: any) {
     const nameOfTickedItem = getClickedItemName(e);
-    const newItemList = itemList.map((item) => {
+    const newAllItems = allItems.map((item) => {
       if(item.name !== nameOfTickedItem) {
         return item;
       }
 
       return {...item, onList: false, done: false}
     })
-    props.setItemList(newItemList)
-
+    setAllItems(newAllItems)
   }
 
   function changeItemDone(e: any, targetDone: boolean) {
@@ -105,32 +97,32 @@ export default function ItemList(props:ItemListProps) {
     }
 
     const nameOfTickedItem = getClickedItemName(e);
-    const newItemList = itemList.map((item) => {
+    const newAllItems = allItems.map((item) => {
       if(item.name !== nameOfTickedItem) {
         return item;
       }
 
       return {...item, done: targetDone, doneAt: newDoneAt}
     })
-    props.setItemList(newItemList)
+    setAllItems(newAllItems)
   }
 
   function deleteItem(e: any) {
     const nameOfTickedItem = getClickedItemName(e);
-    const newItemList = itemList.filter((item) => item.name != nameOfTickedItem)
-    props.setItemList(newItemList)
+    const newAllItems = allItems.filter((item) => item.name != nameOfTickedItem)
+    setAllItems(newAllItems)
   }
 
   function addToList(e: any) {
     const nameOfAddedItem = getClickedItemName(e);
-    const newItemList = itemList.map((item) => {
+    const newAllItems = allItems.map((item) => {
       if(item.name !== nameOfAddedItem) {
         return item;
       }
 
       return {...item, onList: true}
     })
-    props.setItemList(newItemList)
+    setAllItems(newAllItems)
   }
 
   return (

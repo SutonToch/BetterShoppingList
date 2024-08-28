@@ -70,6 +70,8 @@ main {
     inset-inline: 0;
     bottom: 0;
     height: 40px;
+
+    overflow-x: scroll;
 }
 
 .list-selection > .active {
@@ -79,7 +81,13 @@ main {
 
 .list-selection-item {
     cursor: pointer;
+    min-width: fit-content;
     width: 100%;
+    background-color: var(--bg-color);
+    transition: background-color 4s linear;
+    padding-inline: 5px;
+    font-size: 1.25rem;
+    user-select: none;
 }
 
 .list-selection-item:not(:last-child) {

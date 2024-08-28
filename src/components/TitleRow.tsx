@@ -1,16 +1,15 @@
-import { SetStateAction } from "react"
 import "./../styles/titleRow.css"
 import { ArrowLeft } from "./Icons"
 import SettingsDropdown from "./SettingsDropdown"
 
 interface TitleRowProps {
-  allItemList:Array<any>
-  setAllItemList:React.Dispatch<SetStateAction<any>>
   title:string
   backOnClick?:React.MouseEventHandler<HTMLButtonElement>
 }
 
 export default function TitleRow(props:TitleRowProps) {
+  const title = props.title;
+  const titleWithWhitespace = title.slice(0, -1) + " " + title.slice(-1);
 
   return (
     <div className="title-row">
@@ -19,11 +18,8 @@ export default function TitleRow(props:TitleRowProps) {
                 <ArrowLeft />
             </button> : ""
         }
-        <h1 className="title">{props.title}</h1>
-        <SettingsDropdown 
-          allItemList={props.allItemList}
-          setAllItemList={props.setAllItemList}
-        />
+        <h1 className="title">{titleWithWhitespace}</h1>
+        <SettingsDropdown />
     </div>
   )
 }

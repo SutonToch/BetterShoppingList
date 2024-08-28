@@ -1,5 +1,5 @@
 
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import ShoppingList from './components/ShoppingList.tsx';
 import AddItem from './components/AddItem';
 import NewOrEditItem from './components/NewOrEditItem.tsx';
@@ -7,28 +7,60 @@ import Authentication from './components/Authentication.tsx';
 import { db } from './firebase.ts';
 import { collection, doc, onSnapshot, setDoc } from 'firebase/firestore';
 import './styles/App.css'
+import React from 'react';
 
 export interface itemType {
   done: boolean,
   name: string,
-  onList: boolean
-  doneAt: number
+  onList: boolean,
+  doneAt: number,
+  lists: string[]
+}
+
+interface itemDetailsType {
+  edit: boolean;
+  title: string;
+}
+
+interface AppContextType  {
+  setScene: React.Dispatch<React.SetStateAction<string>>
+  allItems: itemType[]
+  setAllItems: React.Dispatch<React.SetStateAction<itemType[]>>
+  setCurrentItemDetails: React.Dispatch<React.SetStateAction<itemDetailsType>>
+  allListNames: string[]
+  activeListName: string
 }
 
 export const doneAtMax = 5000000000000 // roughly 80 years into the future
 
+const AppContext = React.createContext<AppContextType | null>(null);
+export function useAppContext() {
+  const currentAppContext = useContext(AppContext);
+
+  if (!currentAppContext) {
+    throw new Error(
+      "currentAppContext has to be used within <AppContext.Provider>"
+    );
+  }
+
+  return currentAppContext;
+};
+
 export default function App() {
   const [scene, setScene] = useState("auth");
   const [uid, setUid] = useState("")
-  const [allItemList, setAllItemList] = useState([
-    {done: false, name: "", onList: false, doneAt: doneAtMax}
+  const [allItems, setAllItems] = useState([
+    {done: false, name: "", onList: false, doneAt: doneAtMax, lists: [""]}
   ])
-  const [currentItemDetails, setCrrentItemDetails] = useState({
+  const [currentItemDetails, setCurrentItemDetails] = useState({
     edit: false,
     title: ""
   })
+  const [allListNames, setAllListNames] = useState(["Liste1"])
+  const [activeListName, setActiveList] = useState("Liste1")
   let allItemCountOnStartup = 0;
 
+  //runs every time the database is updated
   useEffect(() => {
     // get initial data from firebase and initialize itemList states
     if(uid) {
@@ -36,11 +68,14 @@ export default function App() {
       
       const unsubscribe = onSnapshot(userCollection, (snapshot) => {
         const dataArr = snapshot.docs.map(doc => ({...doc.data()}))
-        const allItems:itemType[] = dataArr.filter((doc) => {
+        const userData = dataArr.filter((doc) => {
           if(doc.uid == uid) {
             return true;
           }
-        })[0].allItems
+        })[0]
+        const allItems:itemType[] = userData.allItems
+        const allDatabaseLists:string[] = userData.allLists
+        setAllListNames(allDatabaseLists)
         
         //check and update done items
         const oneHourInMs = 3600000;
@@ -65,59 +100,57 @@ export default function App() {
         })
 
         allItemCountOnStartup = updatedItemList.length
-        setAllItemList(updatedItemList)
+        setAllItems(updatedItemList)
     })
     return unsubscribe
     }
   }, [uid])
 
+  // UPDATE DATABASE
   useEffect(() => {
     if(uid) {
       const timeoutId = setTimeout(async () => {
-        if(allItemList.length > 1 || allItemList.length > allItemCountOnStartup) {
+        if(allItems.length > 1 || allItems.length > allItemCountOnStartup) {
           const docRef = doc(db, "users", uid)
-          await setDoc(docRef, {allItems: allItemList}, {merge: true})
+          await setDoc(docRef, {allItems: allItems}, {merge: true})
         } else {
           console.error("[WARNING] Atleast one item needs to remain in the list.")
         }
       }, 3000)
       return () => clearTimeout(timeoutId)
     }
-  }, [allItemList, uid])
+  }, [allItems, uid])
+
+  useEffect(() => {
+    if(uid) {
+      const timeoutId = setTimeout(async () => {
+        const docRef = doc(db, "users", uid)
+        await setDoc(docRef, {allLists: allListNames}, {merge: true})
+      }, 3000)
+      return () => clearTimeout(timeoutId)
+    }
+  }, [allListNames, uid])
 
   return (
-    <div id="app">
-      {scene == "auth" ?
-        <Authentication 
-          setScene={setScene}
-          setUid={setUid}
-        /> 
-      : ""}
-      {scene == "main" ? 
-        <ShoppingList 
-          allItemList={allItemList}
-          setAllItemList={setAllItemList}
-          setScene={setScene}
-          setCurrentItemDetails={setCrrentItemDetails}
-        />
-      : ""}
-      {scene == "addItem" ? 
-        <AddItem 
-          itemList={allItemList}
-          setItemList={setAllItemList}
-          setScene={setScene}
-          setCurrentItemDetails={setCrrentItemDetails}
-        /> 
-      : ""}
-      {scene == "newOrEditItem" ?
-        <NewOrEditItem 
-          itemList={allItemList}
-          setItemList={setAllItemList}
-          setScene={setScene}
-          title={currentItemDetails.title}
-          edit={currentItemDetails.edit}
-        /> 
-      : ""}
-    </div>
+    <AppContext.Provider 
+      value={{setScene, allItems, setAllItems, setCurrentItemDetails, allListNames, activeListName}}
+    >
+      <div id="app">
+        {scene == "auth" ? <Authentication setUid={setUid} /> : ""}
+        {scene == "main" ? 
+          <ShoppingList 
+            setAllListNames={setAllListNames} 
+            setActiveList={setActiveList}
+          /> 
+        : ""}
+        {scene == "addItem" ? <AddItem /> : ""}
+        {scene == "newOrEditItem" ?
+          <NewOrEditItem
+            title={currentItemDetails.title}
+            edit={currentItemDetails.edit}
+          /> 
+        : ""}
+      </div>
+    </AppContext.Provider>
   )
 }

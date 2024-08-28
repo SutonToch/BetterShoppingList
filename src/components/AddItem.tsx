@@ -1,22 +1,14 @@
-import { SetStateAction, useState } from "react";
+import { useState } from "react";
 import ItemList from "./ItemList";
 import TitleRow from "./TitleRow";
 import { Plus } from "./Icons";
+import { useAppContext } from "../App";
 
-interface AddItemProps {
-  itemList:Array<any>
-  setItemList:React.Dispatch<SetStateAction<any>>
-  setScene:React.Dispatch<React.SetStateAction<string>>
-  setCurrentItemDetails:React.Dispatch<React.SetStateAction<{
-    edit: boolean;
-    title: string;
-  }>>
-}
-
-export default function AddItem(props:AddItemProps) {
+export default function AddItem() {
   const [searchTerm, setSearchTerm] = useState("")
+  const {allItems, setCurrentItemDetails, setScene, activeListName} = useAppContext()
   
-  let filteredItemList = props.itemList
+  let filteredItemList = allItems.filter((item) => {return item.lists.includes(activeListName)})
   if(searchTerm) {
     filteredItemList = filteredItemList.filter(
       (item) => item.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -25,19 +17,16 @@ export default function AddItem(props:AddItemProps) {
 
   return (
     <>
-      <TitleRow 
-        allItemList={props.itemList}
-        setAllItemList={props.setItemList}
-        title="Liste 1"
-        backOnClick={() => props.setScene("main")}
+      <TitleRow
+        title={activeListName}
+        backOnClick={() => setScene("main")}
       />       
-      <main>
-        <ItemList 
-          itemList={props.itemList}
+      <main
+        //temporary work-around for a strange style issue on mobile. Further tests required.
+        style={searchTerm ? {height: "270px"} : {height: "auto"}}
+      >
+        <ItemList
           filteredItemList={filteredItemList}
-          setItemList={props.setItemList}
-          setScene={props.setScene}
-          setCurrentItemDetails={props.setCurrentItemDetails}
           mode={"add"}
         />
       </main>
@@ -53,8 +42,8 @@ export default function AddItem(props:AddItemProps) {
           className="add-item-btn" 
           style={{marginTop: "auto"}} 
           onClick={() => {
-            props.setScene("newOrEditItem")
-            props.setCurrentItemDetails({edit: false, title: ""})
+            setScene("newOrEditItem")
+            setCurrentItemDetails({edit: false, title: ""})
           }}
         >
           <Plus size={40}/>
