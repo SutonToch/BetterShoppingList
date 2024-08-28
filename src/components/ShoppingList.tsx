@@ -29,8 +29,14 @@ export default function ShoppingList(props:ShoppingListProps) {
           removeList(listName)
           setListWithActiveMouseDown(listName)
         }}
+        onTouchStart={() => {
+          removeList(listName)
+          setListWithActiveMouseDown(listName)
+        }}
         onMouseUp={() => {timeoutToDeleteList ? abortRemoveList(timeoutToDeleteList) : ""}}
+        onTouchEnd={() => {timeoutToDeleteList ? abortRemoveList(timeoutToDeleteList) : ""}}
         onMouseOut={() => {timeoutToDeleteList ? abortRemoveList(timeoutToDeleteList) : ""}}
+        onTouchCancel={() => {timeoutToDeleteList ? abortRemoveList(timeoutToDeleteList) : ""}}
         key={index}
       >
         {listNameWithWhitespace} ({onListNotDoneCount})
